@@ -1,25 +1,30 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-toolbar',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './toolbar.html',
-  styleUrl: './toolbar.css',
+  styleUrls: ['./toolbar.css'], // fixed typo
 })
 export class Toolbar implements OnInit {
   currentTool = 'pen';
 
-  ngOnInit(): void {
-    // plain DOM method (works for small examples)
-    document.querySelectorAll('.tool-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tool-btn').forEach((b) => b.classList.remove('active'));
-        btn.classList.add('active');
+  tools = [
+    { name: 'select', icon: 'bi-mouse' }, // 🖱️
+    { name: 'pen', icon: 'bi-pencil' }, // ✏️
+    { name: 'rect', icon: 'bi-square' }, // ▭
+    { name: 'circle', icon: 'bi-circle' }, // ⚪
+    { name: 'text', icon: 'bi-type' }, // 🔤
+    { name: 'note', icon: 'bi-stickies' }, // 🗒️
+  ];
 
-        const tool = btn.getAttribute('data-tool');
-        if (tool) this.currentTool = tool;
-        console.log('Selected tool:', this.currentTool);
-      });
-    });
+  constructor() { }
+
+  ngOnInit(): void { }
+
+  selectTool(tool: string) {
+    this.currentTool = tool;
+    console.log('Selected tool:', this.currentTool);
   }
 }
