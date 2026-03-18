@@ -7,4 +7,4 @@ import { Toolbar } from '../../shared/reusableComponent/toolbar/toolbar';
   templateUrl: './whiteboard.html',
   styleUrl: './whiteboard.css',
 })
-export class Whiteboard {}
+export class Whiteboard { }
