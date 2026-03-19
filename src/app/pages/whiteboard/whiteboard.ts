@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { Toolbar } from '../../shared/reusableComponent/toolbar/toolbar';
-import { Header } from '../../shared/reusableComponent/header/header';
+import { HeaderWhiteboard } from '../../shared/reusableComponent/header/header-whiteboard/header-whiteboard';
 
 @Component({
   selector: 'app-whiteboard',
-  imports: [Toolbar, Header],
+  imports: [Toolbar, HeaderWhiteboard,],
   templateUrl: './whiteboard.html',
   styleUrl: './whiteboard.css',
 })
