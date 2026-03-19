@@ -1,9 +1,22 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrls: ['./login.css'],
 })
-export class Login {}
+export class Login {
+  email = '';
+  password = '';
+
+  signIn(form: any) {
+    if (form.valid) {
+      console.log('User logged in:', form.value);
+    }
+  }
+}
