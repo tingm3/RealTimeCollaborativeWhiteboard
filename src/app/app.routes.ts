@@ -17,5 +17,9 @@ export const routes: Routes = [
   { path: 'whiteboard', component: Whiteboard, canActivate: [] }, //TODO: add auth guard and /id after whiteboard
   { path: 'login', component: Login },
   { path: 'register', component: Register },
-  { path: '**', redirectTo: '' } // this catches any undefined url and redirects to the landing page
+  { path: 'privacy', component: Privacy },
+  { path: 'terms', component: Terms },
+  { path: 'contact', component: Contact },
+  { path: 'settings', component: Settings, canActivate: [] }, //TODO: add settings page and auth guard
+  { path: '**', redirectTo: '' }, // this catches any undefined url and redirects to the landing page
 ];
