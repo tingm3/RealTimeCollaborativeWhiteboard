@@ -1,0 +1,42 @@
+<div class="vh-100 d-flex justify-content-center align-items-center bg-light">
+  <div class="card shadow-sm p-4 rounded-3" style="width: 320px">
+    <h4 class="text-center mb-4">Settings</h4>
+
+    <form #settingsForm="ngForm" (ngSubmit)="updateSettings(settingsForm)">
+      <!-- Change Password -->
+      <div class="mb-3">
+        <label class="form-label">New Password</label>
+        <input
+          type="password"
+          class="form-control"
+          [(ngModel)]="newPassword"
+          name="newPassword"
+          placeholder="Enter new password"
+        />
+      </div>
+
+      <!-- Theme Selection -->
+      <div class="mb-3">
+        <label class="form-label">Theme</label>
+        <select class="form-select" [(ngModel)]="theme" name="theme">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </div>
+
+      <!-- Update Button -->
+      <button class="btn btn-primary w-100 mb-3" type="submit" [disabled]="settingsForm.invalid">
+        Update Settings
+      </button>
+
+      <hr />
+
+      <!-- Delete Account -->
+      <div class="d-flex justify-content-center">
+        <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteAccount()">
+          Delete Account
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

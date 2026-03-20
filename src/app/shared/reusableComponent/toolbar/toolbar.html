@@ -1,7 +1,11 @@
 <div class="toolbar rounded-3 d-flex flex-column align-items-center py-3 gap-2 bg-light border">
   <!-- Tool buttons -->
-  <button *ngFor="let t of tools" class="btn"
-    [ngClass]="currentTool === t.name ? 'btn-primary active' : 'btn-outline-dark'" (click)="selectTool(t.name)">
+  <button
+    *ngFor="let t of tools"
+    class="btn"
+    [ngClass]="currentTool === t.name ? 'btn-primary active' : 'btn-outline-dark'"
+    (click)="selectTool(t.name)"
+  >
     <i class="bi {{ t.icon }}"></i>
   </button>
 
