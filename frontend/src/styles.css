@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #ffffff;
+  color: #1a1a1a;
+  overflow-x: hidden;
+}
+
+/* Static pages (privacy, terms, contact) */
+.static-page {
+  padding-top: 56px;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+.static-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+.static-title {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+}
+
+.static-date {
+  font-size: 0.85rem;
+  color: #adb5bd;
+  margin-bottom: 3rem;
+}
+
+.static-section {
+  margin-bottom: 2.5rem;
+}
+
+.static-heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.75rem;
+}
+
+.static-text {
+  font-size: 0.95rem;
+  color: #495057;
+  line-height: 1.75;
+}
+
+.static-link {
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.static-link:hover {
+  text-decoration: underline;
+}
+
+/* Contact form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}

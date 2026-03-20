@@ -1,0 +1,60 @@
+<app-header-home variant="home" />
+
+<div class="home-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <a routerLink="/home" class="sidebar-item">
+        <i class="bi bi-house-door"></i>
+        <span>Home</span>
+      </a>
+      <a routerLink="/favorites" class="sidebar-item active">
+        <i class="bi bi-star-fill text-warning"></i>
+        <span>Favorites</span>
+      </a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a routerLink="/settings" class="sidebar-item">
+        <i class="bi bi-gear"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="content-header">
+      <h5 class="fw-bold mb-0">Favorites</h5>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="boards.length === 0">
+      <i class="bi bi-star fs-1 text-muted"></i>
+      <p class="mt-3 text-muted">No favorites yet</p>
+      <p class="text-muted" style="font-size:0.875rem;">Star a board to find it quickly here</p>
+      <a routerLink="/home" class="btn btn-primary btn-pill mt-2">Go to boards</a>
+    </div>
+
+    <!-- Boards Grid -->
+    <div class="boards-grid" *ngIf="boards.length > 0">
+      <div class="board-card" *ngFor="let board of boards">
+        <div class="board-thumbnail">
+          <div class="board-thumbnail-inner"></div>
+        </div>
+        <div class="board-meta">
+          <div class="d-flex align-items-center justify-content-between">
+            <span class="board-name">{{ board.name }}</span>
+            <button class="btn btn-link btn-sm text-warning p-0">
+              <i class="bi bi-star-fill"></i>
+            </button>
+          </div>
+          <div class="board-info">
+            <span class="badge-board" [ngClass]="board.shared ? 'badge-shared' : 'badge-private'">
+              {{ board.shared ? 'Shared' : 'Only you' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
