@@ -1,0 +1,120 @@
+.navbar-whiteboard {
+  height: 56px;
+  background-color: #ffffff;
+}
+
+/* Vertical line separator */
+.auth-divider {
+  height: 24px;
+  width: 1px;
+  background-color: #e0e0e0;
+  margin: 0 10px;
+}
+
+/* Circular button for the back arrow */
+.btn-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  color: #495057;
+  text-decoration: none;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.btn-back:hover {
+  background-color: #f1f3f5;
+  color: #0d6efd;
+}
+
+/* Overlapping Avatars */
+.avatar-stack {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.avatar-pill {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  margin-left: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+/* Rounded Buttons */
+.btn-pill {
+  border-radius: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.board-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #212529;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.board-title-input {
+  border: 1.5px solid #0d6efd;
+  outline: none;
+  background: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #212529;
+  width: 200px;
+  border-radius: 6px;
+  padding: 3px 8px;
+}
+
+.avatar-stack {
+  display: none;
+}
+
+.auth-divider {
+  display: none;
+}
+
+span.navbar-text {
+  font-size: 0.75rem;
+}
+
+.btn-back {
+  width: 26px;
+  height: 26px;
+}
+
+.btn-back i {
+  font-size: 1rem;
+}
+
+.bi-grid-1x2-fill {
+  font-size: 0.85rem;
+}
+
+.btn-sm {
+  padding: 3px 8px;
+  font-size: 0.75rem;
+}
+
+
+@media (max-width: 480px) {
+  span.navbar-text {
+    display: none;
+  }
+
+  .btn-link {
+    display: none;
+  }
+}
