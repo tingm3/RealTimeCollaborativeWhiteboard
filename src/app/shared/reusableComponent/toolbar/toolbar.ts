@@ -5,23 +5,23 @@ import { Component, OnInit } from '@angular/core';
   selector: 'app-toolbar',
   imports: [CommonModule],
   templateUrl: './toolbar.html',
-  styleUrls: ['./toolbar.css'], // fixed typo
+  styleUrls: ['./toolbar.css'],
 })
 export class Toolbar implements OnInit {
   currentTool = 'pen';
 
   tools = [
-    { name: 'select', icon: 'bi-mouse' }, // 🖱️
-    { name: 'pen', icon: 'bi-pencil' }, // ✏️
-    { name: 'rect', icon: 'bi-square' }, // ▭
-    { name: 'circle', icon: 'bi-circle' }, // ⚪
-    { name: 'text', icon: 'bi-type' }, // 🔤
-    { name: 'note', icon: 'bi-stickies' }, // 🗒️
+    { name: 'select', icon: 'bi-mouse' },
+    { name: 'pen', icon: 'bi-pencil' },
+    { name: 'rect', icon: 'bi-square' },
+    { name: 'circle', icon: 'bi-circle' },
+    { name: 'text', icon: 'bi-type' },
+    { name: 'note', icon: 'bi-stickies' },
   ];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   selectTool(tool: string) {
     this.currentTool = tool;
