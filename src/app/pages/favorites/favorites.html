@@ -1,22 +1,20 @@
 <app-header-home variant="home" />
 
 <div class="home-layout">
-
   <!-- Sidebar -->
   <aside class="sidebar">
     <nav class="sidebar-nav">
-      <a href="#" class="sidebar-item active">
+      <a routerLink="/home" class="sidebar-item">
         <i class="bi bi-house-door"></i>
         <span>Home</span>
       </a>
-      <a routerLink="/favorites" class="sidebar-item">
-        <i class="bi bi-star"></i>
+      <a routerLink="/favorites" class="sidebar-item active">
+        <i class="bi bi-star-fill text-warning"></i>
         <span>Favorites</span>
       </a>
     </nav>
-
     <div class="sidebar-bottom">
-      <a href="#" class="sidebar-item">
+      <a routerLink="/settings" class="sidebar-item">
         <i class="bi bi-gear"></i>
         <span>Settings</span>
       </a>
@@ -25,23 +23,20 @@
 
   <!-- Main Content -->
   <main class="main-content">
-
     <div class="content-header">
-      <h5 class="fw-bold mb-0">Recent boards</h5>
+      <h5 class="fw-bold mb-0">Favorites</h5>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="boards.length === 0">
+      <i class="bi bi-star fs-1 text-muted"></i>
+      <p class="mt-3 text-muted">No favorites yet</p>
+      <p class="text-muted" style="font-size:0.875rem;">Star a board to find it quickly here</p>
+      <a routerLink="/home" class="btn btn-primary btn-pill mt-2">Go to boards</a>
     </div>
 
     <!-- Boards Grid -->
-    <div class="boards-grid">
-
-      <!-- New Board Card -->
-      <div class="board-card board-card-new" routerLink="/whiteboard">
-        <div class="new-board-inner">
-          <i class="bi bi-plus-lg fs-4 text-primary"></i>
-          <span class="text-primary fw-semibold mt-1">New board</span>
-        </div>
-      </div>
-
-      <!-- Board Card -->
+    <div class="boards-grid" *ngIf="boards.length > 0">
       <div class="board-card" *ngFor="let board of boards">
         <div class="board-thumbnail">
           <div class="board-thumbnail-inner"></div>
@@ -49,8 +44,8 @@
         <div class="board-meta">
           <div class="d-flex align-items-center justify-content-between">
             <span class="board-name">{{ board.name }}</span>
-            <button class="btn btn-link btn-sm text-muted p-0">
-              <i class="bi bi-three-dots"></i>
+            <button class="btn btn-link btn-sm text-warning p-0">
+              <i class="bi bi-star-fill"></i>
             </button>
           </div>
           <div class="board-info">
@@ -60,13 +55,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </main>
-
-  <!-- New Board Button -->
-  <button class="btn-new-board" routerLink="/whiteboard">
-    <i class="bi bi-plus-lg me-2"></i> New board
-  </button>
-
 </div>

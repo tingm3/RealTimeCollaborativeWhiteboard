@@ -71,7 +71,7 @@
 /* Boards grid */
 .boards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 220px));
   gap: 1.25rem;
 }
 
@@ -160,4 +160,17 @@
   align-items: center;
   transition: transform 0.15s, box-shadow 0.15s;
   z-index: 50;
+}
+
+
+@media (max-width: 900px) {
+  .boards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .boards-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }

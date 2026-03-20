@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { NgFor, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { HeaderHome } from '../../shared/reusableComponent/header/header-home/header-home';
+import { Footer } from '../../shared/reusableComponent/footer/footer';
 
 @Component({
   selector: 'app-home',
-  imports: [HeaderHome, RouterLink, NgFor, NgClass],
+  imports: [HeaderHome, RouterLink, NgClass, Footer],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })

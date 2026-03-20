@@ -1,18 +1,21 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-3 fixed-top shadow-sm navbar-whiteboard">
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-2 fixed-top shadow-sm navbar-whiteboard">
   <div class="container-fluid">
 
     <div class="d-flex align-items-center">
-      <a routerLink="/home" class="btn-back me-2" title="Back to Home">
+      <a routerLink="/home" class="btn-back me-1" title="Back to Home">
         <i class="bi bi-arrow-left-short fs-4"></i>
       </a>
 
-      <div class="auth-divider"></div>
-
       <i class="bi bi-grid-1x2-fill text-primary ms-2"></i>
-      <span class="navbar-text fw-bold text-dark ms-2">Project Whiteboard</span>
+      <span class="board-title ms-2" *ngIf="!isEditing" (click)="startEditing()">
+        {{ boardTitle }}
+      </span>
+
+      <input *ngIf="isEditing" type="text" class="board-title-input ms-2" [(ngModel)]="boardTitle"
+        (blur)="onTitleSave()" (keyup.enter)="onTitleSave()" #titleInput />
     </div>
 
-    <div class="ms-auto d-flex align-items-center">
+    <div class="ms-auto d-flex align-items-cente flex-nowrap">
 
       <div class="avatar-stack me-3 d-none d-md-flex">
         <div class="avatar-pill bg-light text-secondary border">+2</div>
@@ -34,10 +37,10 @@
           Sign Up
         </button>
       </div>
-
+      <!--
       <button class="btn btn-link text-secondary ms-2 p-1">
         <i class="bi bi-gear-fill"></i>
-      </button>
+      </button> -->
     </div>
 
   </div>

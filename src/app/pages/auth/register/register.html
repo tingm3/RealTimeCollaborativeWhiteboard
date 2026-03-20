@@ -1,5 +1,8 @@
+<app-header-home variant="auth" />
+
+
 <div class="vh-100 d-flex justify-content-center align-items-center bg-light">
-  <div class="card shadow-sm p-4 rounded-3" style="width: 340px">
+  <div class="card shadow-sm p-5 rounded-4" style="width: 480px">
     <h4 class="text-center mb-4">Create Account</h4>
 
     <form #form="ngForm" (ngSubmit)="register(form)">
@@ -18,20 +21,13 @@
       <!-- Password -->
       <div class="mb-3">
         <label class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          [(ngModel)]="password"
-          name="password"
-          required
-        />
+        <input type="password" class="form-control" [(ngModel)]="password" name="password" required />
       </div>
 
       <!-- Register Button -->
-      <button type="submit" class="btn btn-primary w-100 mb-2" [disabled]="form.invalid">
+      <button type="submit" class="btn btn-primary w-100 mb-2 btn-pill py-2" [disabled]="form.invalid">
         Register
       </button>
-
       <hr />
 
       <!-- Back to Sign In -->

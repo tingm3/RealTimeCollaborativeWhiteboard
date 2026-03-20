@@ -21,6 +21,8 @@
   border-radius: 8px;
   color: #495057;
   text-decoration: none;
+  flex-shrink: 0;
+  padding: 0;
 }
 
 .btn-back:hover {
@@ -52,4 +54,67 @@
   border-radius: 20px;
   padding-left: 15px;
   padding-right: 15px;
+}
+
+.board-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #212529;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.board-title-input {
+  border: 1.5px solid #0d6efd;
+  outline: none;
+  background: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #212529;
+  width: 200px;
+  border-radius: 6px;
+  padding: 3px 8px;
+}
+
+.avatar-stack {
+  display: none;
+}
+
+.auth-divider {
+  display: none;
+}
+
+span.navbar-text {
+  font-size: 0.75rem;
+}
+
+.btn-back {
+  width: 26px;
+  height: 26px;
+}
+
+.btn-back i {
+  font-size: 1rem;
+}
+
+.bi-grid-1x2-fill {
+  font-size: 0.85rem;
+}
+
+.btn-sm {
+  padding: 3px 8px;
+  font-size: 0.75rem;
+}
+
+
+@media (max-width: 480px) {
+  span.navbar-text {
+    display: none;
+  }
+
+  .btn-link {
+    display: none;
+  }
 }

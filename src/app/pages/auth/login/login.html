@@ -1,45 +1,33 @@
-<div class="vh-100 d-flex justify-content-center align-items-center bg-light">
-  <div class="card shadow-sm p-4 rounded-3" style="width: 320px">
+<app-header-home variant="auth" />
+
+<div class="vh-100 d-flex justify-content-center align-items-center bg-light" style="padding-top: 56px;">
+  <div class="card p-5 rounded-4" style="width: 480px;">
     <h4 class="text-center mb-4">Log In</h4>
 
     <form #form="ngForm" (ngSubmit)="signIn(form)">
       <!-- Email -->
       <div class="mb-3">
         <label class="form-label">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          [(ngModel)]="email"
-          name="email"
-          placeholder="Enter email"
-          required
-        />
+        <input type="email" class="form-control" [(ngModel)]="email" name="email" placeholder="Enter email" required />
       </div>
 
       <!-- Password -->
       <div class="mb-3">
         <label class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          [(ngModel)]="password"
-          name="password"
-          placeholder="Enter password"
-          required
-        />
+        <input type="password" class="form-control" [(ngModel)]="password" name="password" placeholder="Enter password"
+          required />
       </div>
 
       <!-- Log In Button -->
-      <button class="btn btn-primary w-100 mb-2" type="submit" [disabled]="form.invalid">
+      <button class="btn btn-primary w-100 mb-2 btn-pill" type="submit" [disabled]="form.invalid">
         Log In
       </button>
-
       <!-- Divider -->
       <hr />
 
       <!-- Extra Actions -->
       <div class="d-flex justify-content-center">
-        <button type="button" class="btn btn-outline-dark btn-sm" routerLink="/register">
+        <button type="button" class="btn btn-outline-primary w-100" routerLink="/register">
           Create Account
         </button>
       </div>
