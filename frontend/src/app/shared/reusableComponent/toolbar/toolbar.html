@@ -12,6 +12,13 @@
   <hr class="w-75 border-dark" />
 
   <!-- Action buttons -->
-  <button class="btn btn-warning"><i class="bi-arrow-counterclockwise"></i></button>
-  <button class="btn btn-danger"><i class="bi-trash"></i></button>
+  <button class="btn btn-warning" (click)="triggerUndo()">
+    <i class="bi-arrow-counterclockwise"></i>
+  </button>
+  <button class="btn btn-danger" (click)="triggerTrash()">
+    <i class="bi-trash"></i>
+  </button>
+  <button class="btn btn-success" (click)="triggerSave()">
+    <i class="bi-save"></i>
+  </button>
 </div>

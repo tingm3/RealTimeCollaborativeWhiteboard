@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-toolbar',
@@ -7,7 +7,12 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './toolbar.html',
   styleUrls: ['./toolbar.css'],
 })
-export class Toolbar implements OnInit {
+export class Toolbar {
+  @Output() toolSelected: EventEmitter<string> = new EventEmitter(); // Event emitter
+  @Output() undo = new EventEmitter<void>();
+  @Output() trash = new EventEmitter<void>();
+  @Output() save = new EventEmitter<void>();
+
   currentTool = 'pen';
 
   tools = [
@@ -21,10 +26,20 @@ export class Toolbar implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
-
   selectTool(tool: string) {
     this.currentTool = tool;
-    console.log('Selected tool:', this.currentTool);
+    this.toolSelected.emit(this.currentTool); // Emit the selected tool
+  }
+
+  triggerUndo() {
+    this.undo.emit();
+  }
+
+  triggerTrash() {
+    this.trash.emit();
+  }
+
+  triggerSave() {
+    this.save.emit();
   }
 }

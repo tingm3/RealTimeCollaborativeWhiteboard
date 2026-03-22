@@ -1,6 +1,11 @@
 <app-header-whiteboard></app-header-whiteboard>
 
 <div class="whiteboard-container">
-  <app-toolbar></app-toolbar>
+  <app-toolbar
+    (toolSelected)="onToolSelected($event)"
+    (undo)="onUndo()"
+    (trash)="onTrash()"
+    (save)="onSave()"
+  ></app-toolbar>
   <canvas #canvas></canvas>
 </div>
