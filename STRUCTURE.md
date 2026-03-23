@@ -3,11 +3,13 @@
 .
 ├── backend
 .
+├── STRUCTURE.md
 ├── backend
 │   └── realtime-whiteboard
 │       ├── mvnw
 │       ├── mvnw.cmd
 │       ├── pom.xml
+│       ├── realtime-whiteboard.iml
 │       └── src
 │           ├── main
 │           │   ├── java
@@ -22,12 +24,12 @@
 │                       └── mthree
 │                           └── whiteboard
 ├── frontend
+│   ├── README.md
 │   ├── angular.json
 │   ├── package-lock.json
 │   ├── package.json
 │   ├── public
 │   │   └── favicon.ico
-│   ├── README.md
 │   ├── src
 │   │   ├── app
 │   │   │   ├── app.config.ts
@@ -42,23 +44,22 @@
 │   │   │   │   ├── content.spec.ts
 │   │   │   │   └── content.ts
 │   │   │   ├── core
+│   │   │   │   ├── guards
+│   │   │   │   │   └── auth.guard.ts
 │   │   │   │   ├── helpers
 │   │   │   │   │   ├── coordinate-helper.ts
 │   │   │   │   │   └── user.model.ts
+│   │   │   │   ├── interceptors
+│   │   │   │   │   └── auth.interceptor.ts
 │   │   │   │   ├── models
-│   │   │   │   │   ├── artist.spec.ts
-│   │   │   │   │   ├── artist.ts
-│   │   │   │   │   ├── board-collaborator.spec.ts
-│   │   │   │   │   ├── board-collaborator.ts
-│   │   │   │   │   ├── permission-level.spec.ts
-│   │   │   │   │   ├── permission-level.ts
-│   │   │   │   │   ├── whiteboard.spec.ts
-│   │   │   │   │   └── whiteboard.ts
+│   │   │   │   │   ├── drawing-item.model.ts
+│   │   │   │   │   └── user.model.ts
 │   │   │   │   └── services
-│   │   │   │       ├── artist.spec.ts
-│   │   │   │       ├── artist.ts
-│   │   │   │       ├── auth.spec.ts
-│   │   │   │       └── auth.ts
+│   │   │   │       └── auth
+│   │   │   │           ├── auth.service.spec.ts
+│   │   │   │           ├── auth.service.ts
+│   │   │   │           ├── auth.spec.ts
+│   │   │   │           └── auth.ts
 │   │   │   ├── pages
 │   │   │   │   ├── auth
 │   │   │   │   │   ├── login
@@ -155,6 +156,5 @@
 │   ├── tsconfig.app.json
 │   ├── tsconfig.json
 │   └── tsconfig.spec.json
-├── start.sh
-└── STRUCTURE.md
+└── start.sh
 ```
