@@ -30,6 +30,11 @@ public class AuthService {
 
     // hashes the password, saves the new Artist to the DB, generates and returns a JWT
     public AuthResponse register(RegisterRequest request) {
+        if (artistRepository.findByUsername(request.getUsername()).isPresent()) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.CONFLICT, "Username already taken"
+            );
+        }
         Artist artist = new Artist();
         artist.setUsername(request.getUsername());
         artist.setPasswordHash(passwordEncoder.encode(request.getPassword()));

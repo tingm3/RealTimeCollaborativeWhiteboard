@@ -9,17 +9,18 @@ import { Terms } from './pages/terms/terms';
 import { Contact } from './pages/contact/contact';
 import { Favorites } from './pages/favorites/favorites';
 import { Settings } from './pages/home/settings/settings';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: Landing },
-  { path: 'home', component: Home, canActivate: [] },
-  { path: 'favorites', component: Favorites, canActivate: [] },
-  { path: 'whiteboard', component: Whiteboard, canActivate: [] }, //TODO: add auth guard and /id after whiteboard
+  { path: 'home', component: Home, canActivate: [authGuard] },
+  { path: 'favorites', component: Favorites, canActivate: [authGuard] },
+  { path: 'settings', component: Settings, canActivate: [authGuard] },
+  { path: 'whiteboard', component: Whiteboard, canActivate: [authGuard] }, //TODO: add auth guard and /id after whiteboard
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'privacy', component: Privacy },
   { path: 'terms', component: Terms },
   { path: 'contact', component: Contact },
-  { path: 'settings', component: Settings, canActivate: [] }, //TODO: add settings page and auth guard
   { path: '**', redirectTo: '' }, // this catches any undefined url and redirects to the landing page
 ];

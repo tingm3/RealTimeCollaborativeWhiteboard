@@ -23,7 +23,20 @@
             <input type="text" class="form-control bg-light border-start-0" placeholder="Search boards..." />
           </div>
           <div class="auth-divider"></div>
-          <div class="avatar-pill bg-primary text-white" style="cursor: pointer;">JD</div>
+
+          <!-- Avatar + Dropdown -->
+          <div class="position-relative">
+            <div class="avatar-pill bg-primary text-white" style="cursor: pointer;" (click)="toggleDropdown()">
+              {{ initials }}
+            </div>
+            <div *ngIf="isDropdownOpen" class="position-absolute end-0 mt-2 bg-white border rounded-3 shadow-sm"
+              style="min-width: 160px; z-index: 1000;">
+              <div class="px-3 py-2 border-bottom text-muted small">{{ username }}</div>
+              <button class="btn btn-sm w-100 text-start px-3 py-2 text-danger" (click)="logout()">
+                <i class="bi bi-box-arrow-right me-2"></i>Log out
+              </button>
+            </div>
+          </div>
 
         </ng-container>
       </div>
