@@ -37,9 +37,13 @@ start_backend() {
 
 # Start Angular
 start_frontend() {
+  # Kill any existing process on port 4200
+  if lsof -i :4200 > /dev/null 2>&1; then
+    echo "Killing existing process on port 4200..."
+    kill -9 $(lsof -t -i:4200)
+  fi
   cd frontend && ng serve --open
 }
-
 update_tree
 start_backend
 start_frontend

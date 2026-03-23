@@ -5,10 +5,11 @@
     <h4 class="text-center mb-4">Log In</h4>
 
     <form #form="ngForm" (ngSubmit)="signIn(form)">
-      <!-- Email -->
+      <!-- Username -->
       <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-control" [(ngModel)]="email" name="email" placeholder="Enter email" required />
+        <label class="form-label">Username</label>
+        <input type="text" class="form-control" [(ngModel)]="username" name="username" placeholder="Enter username"
+          required />
       </div>
 
       <!-- Password -->
@@ -18,14 +19,16 @@
           required />
       </div>
 
+      <!-- Error -->
+      <div *ngIf="errorMessage" class="alert alert-danger py-2 mb-2">{{ errorMessage }}</div>
+
       <!-- Log In Button -->
-      <button class="btn btn-primary w-100 mb-2 btn-pill" type="submit" [disabled]="form.invalid">
-        Log In
+      <button class="btn btn-primary w-100 mb-2 btn-pill" type="submit" [disabled]="form.invalid || isLoading">
+        {{ isLoading ? 'Logging in...' : 'Log In' }}
       </button>
-      <!-- Divider -->
+
       <hr />
 
-      <!-- Extra Actions -->
       <div class="d-flex justify-content-center">
         <button type="button" class="btn btn-outline-primary w-100" routerLink="/register">
           Create Account

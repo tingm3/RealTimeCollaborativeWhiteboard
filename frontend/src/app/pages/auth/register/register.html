@@ -1,21 +1,14 @@
 <app-header-home variant="auth" />
 
-
 <div class="vh-100 d-flex justify-content-center align-items-center bg-light">
   <div class="card shadow-sm p-5 rounded-4" style="width: 480px">
     <h4 class="text-center mb-4">Create Account</h4>
 
     <form #form="ngForm" (ngSubmit)="register(form)">
-      <!-- Name -->
+      <!-- Username -->
       <div class="mb-3">
-        <label class="form-label">Name</label>
-        <input type="text" class="form-control" [(ngModel)]="name" name="name" required />
-      </div>
-
-      <!-- Email -->
-      <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-control" [(ngModel)]="email" name="email" required />
+        <label class="form-label">Username</label>
+        <input type="text" class="form-control" [(ngModel)]="username" name="username" required />
       </div>
 
       <!-- Password -->
@@ -24,13 +17,15 @@
         <input type="password" class="form-control" [(ngModel)]="password" name="password" required />
       </div>
 
+      <!-- Error -->
+      <div *ngIf="errorMessage" class="alert alert-danger py-2 mb-2">{{ errorMessage }}</div>
+
       <!-- Register Button -->
-      <button type="submit" class="btn btn-primary w-100 mb-2 btn-pill py-2" [disabled]="form.invalid">
-        Register
+      <button type="submit" class="btn btn-primary w-100 mb-2 btn-pill py-2" [disabled]="form.invalid || isLoading">
+        {{ isLoading ? 'Registering...' : 'Register' }}
       </button>
       <hr />
 
-      <!-- Back to Sign In -->
       <button type="button" class="btn btn-outline-dark w-100" routerLink="/login">
         Back to Log In
       </button>
