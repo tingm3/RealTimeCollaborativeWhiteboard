@@ -1,4 +1,4 @@
-package com.khalil.whiteboard.realtime_whiteboard;
+package com.mthree.realtime_whiteboard.realtime_whiteboard;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
