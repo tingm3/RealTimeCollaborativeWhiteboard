@@ -1,10 +1,10 @@
-package com.khalil.whiteboard.realtime_whiteboard.controller;
+package com.mthree.realtime_whiteboard.controller;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
-import com.khalil.whiteboard.realtime_whiteboard.model.Stroke;
+import com.mthree.realtime_whiteboard.model.Stroke;
 
 @Controller
 public class WhiteboardController {

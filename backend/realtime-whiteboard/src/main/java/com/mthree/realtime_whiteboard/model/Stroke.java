@@ -1,4 +1,4 @@
-package com.khalil.whiteboard.realtime_whiteboard.model;
+package com.mthree.realtime_whiteboard.model;
 
 import java.util.List;
 

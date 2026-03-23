@@ -1,4 +1,4 @@
-package com.khalil.whiteboard.realtime_whiteboard.config;
+package com.mthree.realtime_whiteboard.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

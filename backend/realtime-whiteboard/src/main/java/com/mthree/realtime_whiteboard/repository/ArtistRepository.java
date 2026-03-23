@@ -1,6 +1,6 @@
-package com.khalil.whiteboard.realtime_whiteboard.repository;
+package com.mthree.realtime_whiteboard.repository;
 
-import com.khalil.whiteboard.realtime_whiteboard.model.Artist;
+import com.mthree.realtime_whiteboard.model.Artist;
 
 import java.util.Optional;
 

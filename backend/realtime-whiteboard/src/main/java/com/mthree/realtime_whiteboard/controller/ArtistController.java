@@ -1,10 +1,10 @@
-package com.khalil.whiteboard.realtime_whiteboard.controller;
+package com.mthree.realtime_whiteboard.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.khalil.whiteboard.realtime_whiteboard.model.Artist;
-import com.khalil.whiteboard.realtime_whiteboard.repository.ArtistRepository;
+import com.mthree.realtime_whiteboard.model.Artist;
+import com.mthree.realtime_whiteboard.repository.ArtistRepository;
 
 import java.util.List;
 import java.util.Optional;
