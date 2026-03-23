@@ -52,6 +52,4 @@ backend/realtime-whiteboard/target/
 
 # Frontend node modules
 frontend/node_modules/
-
-**/.DS_Store
-
+EOF
