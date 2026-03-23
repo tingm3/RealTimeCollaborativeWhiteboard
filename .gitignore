@@ -1,26 +1,36 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
-
-# Compiled output
+# ─── Frontend ───────────────────────────────
 /dist
 /tmp
 /out-tsc
 /bazel-out
+frontend/dist/
+frontend/node_modules/
+frontend/.angular/
+/.angular/cache
 
 # Node
-node_modules
 npm-debug.log
 yarn-error.log
 
-# IDEs and editors
+# ─── Backend ────────────────────────────────
+backend/realtime-whiteboard/target/
+backend/realtime-whiteboard/.mvn/wrapper/maven-wrapper.jar
+HELP.md
+
+# ─── IDEs ───────────────────────────────────
 .idea/
+*.iws
+*.iml
+*.ipr
 .project
 .classpath
+.factorypath
+.settings/
+.springBeans
+.sts4-cache
 .c9/
 *.launch
-.settings/
 *.sublime-workspace
-
-# Visual Studio Code
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -29,8 +39,7 @@ yarn-error.log
 !.vscode/mcp.json
 .history/*
 
-# Miscellaneous
-/.angular/cache
+# ─── Miscellaneous ──────────────────────────
 .sass-cache/
 /connect.lock
 /coverage
@@ -38,18 +47,18 @@ yarn-error.log
 testem.log
 /typings
 __screenshots__/
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
 
-# System files
+# ─── System ─────────────────────────────────
 .DS_Store
+**/.DS_Store
 Thumbs.db
 
-
+# ─── Environment ────────────
 .env
-frontend/.angular/
-
-# Java build output
-backend/realtime-whiteboard/target/
-
-# Frontend node modules
-frontend/node_modules/
-EOF
+.env.local
+.env.production
+backend/realtime-whiteboard/src/main/resources/application-local.properties
