@@ -1,42 +1,104 @@
-<div class="vh-100 d-flex justify-content-center align-items-center bg-light">
-  <div class="card shadow-sm p-4 rounded-3" style="width: 320px">
-    <h4 class="text-center mb-4">Settings</h4>
+<div class="settings-page">
 
-    <form #settingsForm="ngForm" (ngSubmit)="updateSettings(settingsForm)">
-      <!-- Change Password -->
-      <div class="mb-3">
-        <label class="form-label">New Password</label>
-        <input
-          type="password"
-          class="form-control"
-          [(ngModel)]="newPassword"
-          name="newPassword"
-          placeholder="Enter new password"
-        />
+  <div class="settings-header">
+    <h2 class="settings-title">Settings</h2>
+  </div>
+
+  <div class="settings-tabs">
+    <div class="tab" [class.active]="activeTab === 'account'" (click)="activeTab = 'account'">Account</div>
+    <div class="tab" [class.active]="activeTab === 'security'" (click)="activeTab = 'security'">Security</div>
+    <div class="tab" [class.active]="activeTab === 'appearance'" (click)="activeTab = 'appearance'">Appearance</div>
+  </div>
+
+  <!-- Account Tab -->
+  <div *ngIf="activeTab === 'account'">
+    <p class="section-label">Basics</p>
+    <div class="settings-card">
+
+      <div class="avatar-row">
+        <div class="avatar">{{ currentUsername | slice:0:2 | uppercase }}</div>
+        <div class="avatar-info">
+          <div class="avatar-name">{{ currentUsername }}</div>
+          <div class="avatar-sub">Member</div>
+        </div>
       </div>
 
-      <!-- Theme Selection -->
-      <div class="mb-3">
-        <label class="form-label">Theme</label>
-        <select class="form-select" [(ngModel)]="theme" name="theme">
+      <div class="settings-row">
+        <span class="row-label">Username</span>
+        <span class="row-value">{{ currentUsername }}</span>
+        <button class="btn-edit" (click)="togglePanel('username')">
+          {{ expandedPanel === 'username' ? 'Cancel' : 'Edit' }}
+        </button>
+      </div>
+
+      <div class="expand-panel" *ngIf="expandedPanel === 'username'">
+        <input type="text" class="expand-input" [(ngModel)]="newUsername" placeholder="New username" />
+        <div class="expand-actions">
+          <button class="btn-save" (click)="updateUsername()" [disabled]="isUsernameLoading">
+            {{ isUsernameLoading ? 'Saving...' : 'Save' }}
+          </button>
+          <button class="btn-cancel" (click)="togglePanel(null)">Cancel</button>
+          <span class="feedback error" *ngIf="usernameError">{{ usernameError }}</span>
+          <span class="feedback success" *ngIf="usernameSuccess">{{ usernameSuccess }}</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Security Tab -->
+  <div *ngIf="activeTab === 'security'">
+    <p class="section-label">Password</p>
+    <div class="settings-card">
+
+      <div class="settings-row">
+        <span class="row-label">Password</span>
+        <span class="row-value muted">••••••••</span>
+        <button class="btn-edit" (click)="togglePanel('password')">
+          {{ expandedPanel === 'password' ? 'Cancel' : 'Edit' }}
+        </button>
+      </div>
+
+      <div class="expand-panel" *ngIf="expandedPanel === 'password'">
+        <input type="password" class="expand-input" [(ngModel)]="currentPassword" placeholder="Current password" />
+        <input type="password" class="expand-input" [(ngModel)]="newPassword" placeholder="New password" />
+        <div class="expand-actions">
+          <button class="btn-save" (click)="updatePassword()" [disabled]="isPasswordLoading">
+            {{ isPasswordLoading ? 'Saving...' : 'Save' }}
+          </button>
+          <button class="btn-cancel" (click)="togglePanel(null)">Cancel</button>
+          <span class="feedback error" *ngIf="passwordError">{{ passwordError }}</span>
+          <span class="feedback success" *ngIf="passwordSuccess">{{ passwordSuccess }}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="section-label danger-label">Danger zone</p>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div class="row-info">
+          <span class="row-label">Delete account</span>
+          <span class="row-desc">Permanently delete your account and all data</span>
+        </div>
+        <button class="btn-danger" (click)="deleteAccount()">Delete account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Appearance Tab -->
+  <div *ngIf="activeTab === 'appearance'">
+    <p class="section-label">Display</p>
+    <div class="settings-card">
+      <div class="settings-row">
+        <span class="row-label">Theme</span>
+        <span class="row-value"></span>
+        <select class="settings-select" [(ngModel)]="theme" (change)="updateTheme()">
           <option value="light">Light</option>
           <option value="dark">Dark</option>
         </select>
       </div>
-
-      <!-- Update Button -->
-      <button class="btn btn-primary w-100 mb-3" type="submit" [disabled]="settingsForm.invalid">
-        Update Settings
-      </button>
-
-      <hr />
-
-      <!-- Delete Account -->
-      <div class="d-flex justify-content-center">
-        <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteAccount()">
-          Delete Account
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
+
 </div>
