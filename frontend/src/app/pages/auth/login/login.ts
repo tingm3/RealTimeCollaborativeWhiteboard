@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { HeaderHome } from '../../../shared/reusableComponent/header/header-home/header-home';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,12 +13,32 @@ import { HeaderHome } from '../../../shared/reusableComponent/header/header-home
   styleUrls: ['./login.css'],
 })
 export class Login {
-  email = '';
+  username = '';
   password = '';
+  errorMessage = '';
+  isLoading = false;
+
+  constructor(private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef
+  ) { }
 
   signIn(form: any) {
     if (form.valid) {
-      console.log('User logged in:', form.value);
+      this.isLoading = true;
+      this.errorMessage = '';
+
+      this.authService.login({ username: this.username, password: this.password }).subscribe({
+        next: () => {
+          this.router.navigate(['/home']);
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.errorMessage = err.status === 401 || err.status === 403
+            ? 'Invalid username or password'
+            : 'Something went wrong. Please try again.';
+          this.cdr.detectChanges();
+
+        }
+      });
     }
   }
 }

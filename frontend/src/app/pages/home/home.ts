@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { NgClass } from '@angular/common';
+import { NgClass, NgFor } from '@angular/common';
 import { HeaderHome } from '../../shared/reusableComponent/header/header-home/header-home';
 import { Footer } from '../../shared/reusableComponent/footer/footer';
 

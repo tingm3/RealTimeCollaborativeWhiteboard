@@ -1,0 +1,64 @@
+# ─── Frontend ───────────────────────────────
+/dist
+/tmp
+/out-tsc
+/bazel-out
+frontend/dist/
+frontend/node_modules/
+frontend/.angular/
+/.angular/cache
+
+# Node
+npm-debug.log
+yarn-error.log
+
+# ─── Backend ────────────────────────────────
+backend/realtime-whiteboard/target/
+backend/realtime-whiteboard/.mvn/wrapper/maven-wrapper.jar
+HELP.md
+
+# ─── IDEs ───────────────────────────────────
+.idea/
+*.iws
+*.iml
+*.ipr
+.project
+.classpath
+.factorypath
+.settings/
+.springBeans
+.sts4-cache
+.c9/
+*.launch
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/mcp.json
+.history/*
+
+# ─── Miscellaneous ──────────────────────────
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+__screenshots__/
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+# ─── System ─────────────────────────────────
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# ─── Environment ────────────
+.env
+.env.local
+.env.production
+backend/realtime-whiteboard/src/main/resources/application-local.properties

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { HeaderHome } from '../../../shared/reusableComponent/header/header-home/header-home';
+import { AuthService } from '../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -12,13 +13,32 @@ import { HeaderHome } from '../../../shared/reusableComponent/header/header-home
   styleUrls: ['./register.css'],
 })
 export class Register {
-  name = '';
-  email = '';
+  username = '';
   password = '';
+  errorMessage = '';
+  isLoading = false;
+
+  constructor(private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef
+  ) { }
 
   register(form: any) {
     if (form.valid) {
-      console.log('User Registered:', form.value);
+      this.isLoading = true;
+      this.errorMessage = '';
+
+      this.authService.register({ username: this.username, password: this.password }).subscribe({
+        next: () => {
+          this.router.navigate(['/home']);
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.errorMessage = err.status === 409 || err.status === 403
+            ? 'Username already taken'
+            : 'Something went wrong. Please try again.';
+          this.cdr.detectChanges();
+        }
+
+      });
     }
   }
 }
