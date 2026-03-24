@@ -14,21 +14,14 @@ import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: Landing },
-  {
-    path: 'home',
-    component: Home,
-    canActivate: [authGuard],
-    children: [
-      { path: '', component: HomeContent },
-      { path: 'settings', component: Settings }
-    ]
-  },
+  { path: 'home', component: Home, canActivate: [authGuard] },
   { path: 'favorites', component: Favorites, canActivate: [authGuard] },
-  { path: 'whiteboard', component: Whiteboard, canActivate: [authGuard] },
+  { path: 'settings', component: Settings, canActivate: [authGuard] },
+  { path: 'whiteboard', component: Whiteboard, canActivate: [authGuard] }, //TODO: add auth guard and /id after whiteboard
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'privacy', component: Privacy },
   { path: 'terms', component: Terms },
   { path: 'contact', component: Contact },
-  { path: '**', redirectTo: '' },
+  { path: '**', redirectTo: '' }, // this catches any undefined url and redirects to the landing page
 ];

@@ -8,7 +8,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    // Automatically attach auth token to all HTTP requests
+    // Register the auth interceptor globally so it applies to all HTTP requests
     provideHttpClient(withInterceptors([authInterceptor]))
+
   ]
 };

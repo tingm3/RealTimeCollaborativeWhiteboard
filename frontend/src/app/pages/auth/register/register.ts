@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HeaderHome } from '../../../shared/reusableComponent/header/header-home/header-home';
 import { AuthService } from '../../../core/services/auth/auth.service';
 
@@ -18,8 +18,8 @@ export class Register {
   errorMessage = '';
   isLoading = false;
 
-  constructor(private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef
-  ) { }
+  constructor(private authService: AuthService, private router: Router) { }
+
 
   register(form: any) {
     if (form.valid) {
@@ -32,12 +32,10 @@ export class Register {
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage = err.status === 409 || err.status === 403
-            ? 'Username already taken'
+          this.errorMessage = err.status === 400
+            ? 'Username already exists'
             : 'Something went wrong. Please try again.';
-          this.cdr.detectChanges();
         }
-
       });
     }
   }

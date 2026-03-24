@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { HeaderHome } from '../../../shared/reusableComponent/header/header-home/header-home';
 import { AuthService } from '../../../core/services/auth/auth.service';
 
@@ -15,11 +15,11 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 export class Login {
   username = '';
   password = '';
+
   errorMessage = '';
   isLoading = false;
 
-  constructor(private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef
-  ) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   signIn(form: any) {
     if (form.valid) {
@@ -32,11 +32,9 @@ export class Login {
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage = err.status === 401 || err.status === 403
+          this.errorMessage = err.status === 401
             ? 'Invalid username or password'
             : 'Something went wrong. Please try again.';
-          this.cdr.detectChanges();
-
         }
       });
     }

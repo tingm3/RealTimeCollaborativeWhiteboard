@@ -6,7 +6,11 @@
 
     <form #form="ngForm" (ngSubmit)="signIn(form)">
       <!-- Username -->
+      <!-- Username -->
       <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" class="form-control" [(ngModel)]="username" name="username" placeholder="Enter username"
+          required />
         <label class="form-label">Username</label>
         <input type="text" class="form-control" [(ngModel)]="username" name="username" placeholder="Enter username"
           required />
@@ -29,6 +33,10 @@
 
       <hr />
 
+      <!-- Error -->
+      <div *ngIf="errorMessage" class="alert alert-danger py-2 mb-2">{{ errorMessage }}</div>
+
+      <!-- Extra Actions -->
       <div class="d-flex justify-content-center">
         <button type="button" class="btn btn-outline-primary w-100" routerLink="/register">
           Create Account
