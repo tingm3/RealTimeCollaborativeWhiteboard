@@ -3,6 +3,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "RealtimeWhiteboardApplication",
+      "request": "launch",
+      "mainClass": "com.khalil.whiteboard.realtime_whiteboard.RealtimeWhiteboardApplication",
+      "projectName": "realtime-whiteboard"
+    },
+    {
       "name": "ng serve",
       "type": "chrome",
       "request": "launch",

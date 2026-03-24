@@ -1,6 +1,9 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Toolbar } from '../../shared/reusableComponent/toolbar/toolbar';
 import { HeaderWhiteboard } from '../../shared/reusableComponent/header/header-whiteboard/header-whiteboard';
+import * as Stomp from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
+import { Client, IMessage } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-whiteboard',
@@ -13,6 +16,10 @@ export class Whiteboard {
 
   private ctx!: CanvasRenderingContext2D;
 
+  private stompClient!: Stomp.Client;
+  private isConnected = false;
+  private clientId = Math.random().toString(36).substr(2, 9); // Unique ID for this client
+
   currentTool: string = 'pen';
 
   // Drawing state
@@ -21,7 +28,6 @@ export class Whiteboard {
   private startX = 0; // Starting x-coordinate of the drag
   private startY = 0; // Starting y-coordinate of the drag
   private drawings: any[] = []; // for storing all drawn shapes for redraw
-  private lastDrawing: any = {}; // for storing the last drawn shape (used for undo)
   private currentStroke: { x: number; y: number }[] = []; // for storing points of the current pen stroke
   MIN_SCALE = 0.2;
   MAX_SCALE = 5;
@@ -32,6 +38,8 @@ export class Whiteboard {
   };
 
   ngAfterViewInit() {
+    this.connect();
+
     const canvas = this.canvasRef.nativeElement;
     this.ctx = canvas.getContext('2d')!;
 
@@ -60,9 +68,19 @@ export class Whiteboard {
   }
 
   onUndo() {
-    if (this.drawings.length > 0) {
-      this.lastDrawing = this.drawings.pop(); // Remove last drawing and store it for potential redo
-      this.redrawCanvas();
+    // Find the last shape drawn by this client
+    for (let i = this.drawings.length - 1; i >= 0; i--) {
+      if (this.drawings[i].clientId === this.clientId) {
+        const lastDrawing = this.drawings.splice(i, 1)[0]; // remove it
+        this.redrawCanvas();
+
+        // Send erase to server using the ID
+        this.stompClient.publish({
+          destination: '/app/erase',
+          body: lastDrawing.id,
+        });
+        break; // stop after removing one
+      }
     }
   }
 
@@ -70,6 +88,10 @@ export class Whiteboard {
     if (confirm('Are you sure you want to clear the whiteboard?')) {
       this.drawings = [];
       this.redrawCanvas();
+      this.stompClient.publish({
+        destination: '/app/erase',
+        body: 'ALL',
+      });
     }
   }
 
@@ -116,14 +138,15 @@ export class Whiteboard {
         this.ctx.font = `${fontSize}px Arial`;
         this.ctx.fillText(text, worldX, worldY);
 
-        this.lastDrawing = {
+        let textObj = {
           type: 'text',
           text: text,
           x: worldX,
           y: worldY,
           font: `${fontSize}px Arial`,
         };
-        this.drawings.push(this.lastDrawing);
+
+        this.onDraw(textObj);
       }
     }
 
@@ -137,7 +160,8 @@ export class Whiteboard {
       const textOffsetY = 20 / scale;
 
       this.drawNote(text, worldX, worldY, width, height, fontSize, textOffsetX, textOffsetY);
-      this.lastDrawing = {
+
+      let note = {
         type: 'note',
         text: text || 'Note',
         x: worldX,
@@ -148,7 +172,8 @@ export class Whiteboard {
         textOffsetX: textOffsetX,
         textOffsetY: textOffsetY,
       };
-      this.drawings.push(this.lastDrawing);
+
+      this.onDraw(note);
     }
 
     if (['rect', 'circle'].includes(this.currentTool)) {
@@ -228,13 +253,13 @@ export class Whiteboard {
     if (!this.drawing) return;
 
     if (this.currentTool === 'pen') {
-      this.drawings.push({
+      let stroke = {
         type: 'pen',
         points: [...this.currentStroke], // you collect points in mousemove
-        strokeStyle: this.ctx.strokeStyle,
         lineWidth: this.ctx.lineWidth,
-      });
-      this.currentStroke = [];
+      };
+      this.onDraw(stroke);
+      this.currentStroke = []; // reset for next stroke
     }
 
     const scale = this.viewportTransform.scale;
@@ -252,29 +277,31 @@ export class Whiteboard {
     if (this.currentTool === 'rect') {
       this.drawRect(startWorldX, startWorldY, worldX, worldY);
 
-      this.drawings.push({
+      let rect = {
         type: 'rect',
         x1: startWorldX,
         y1: startWorldY,
         x2: worldX,
         y2: worldY,
-        strokeStyle: this.ctx.strokeStyle,
         lineWidth: this.ctx.lineWidth,
-      });
+      };
+
+      this.onDraw(rect);
     }
 
     if (this.currentTool === 'circle') {
       this.drawCircle(startWorldX, startWorldY, worldX, worldY);
 
-      this.drawings.push({
+      let circle = {
         type: 'circle',
         x1: startWorldX,
         y1: startWorldY,
         x2: worldX,
         y2: worldY,
-        strokeStyle: this.ctx.strokeStyle,
         lineWidth: this.ctx.lineWidth,
-      });
+      };
+
+      this.onDraw(circle);
     }
 
     this.drawing = false;
@@ -345,7 +372,6 @@ export class Whiteboard {
         this.ctx.lineWidth = 1; // reset line width
       } else if (shape.type === 'pen') {
         this.ctx.beginPath();
-        this.ctx.strokeStyle = shape.strokeStyle || '#000';
         this.ctx.lineWidth = shape.lineWidth * 2 || 2;
 
         const points = shape.points;
@@ -452,5 +478,77 @@ export class Whiteboard {
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
     this.redrawCanvas();
+  }
+
+  // =========================
+  // For backend communication
+  // =========================
+
+  private onDraw(shape: any) {
+    shape.clientId = this.clientId;
+    shape.id = null; // no ID yet
+
+    // Draw locally
+    this.drawings.push(shape);
+    this.redrawCanvas();
+
+    // Send to server
+    this.stompClient.publish({
+      destination: '/app/draw',
+      body: JSON.stringify(shape),
+    });
+  }
+
+  private removeShapeById(id: number) {
+    const index = this.drawings.findIndex((shape) => shape.id === id);
+    if (index !== -1) {
+      this.drawings.splice(index, 1);
+      this.redrawCanvas();
+    }
+  }
+
+  private connect() {
+    const socket = new SockJS('http://localhost:8080/ws');
+    this.stompClient = new Client({
+      webSocketFactory: () => socket as any, // SockJS instance
+      reconnectDelay: 5000,
+    });
+
+    this.stompClient.onConnect = (frame) => {
+      this.isConnected = true;
+      this.stompClient.subscribe('/topic/drawings', (message: IMessage) => {
+        const shapeFromServer = JSON.parse(message.body);
+
+        const existingIndex = this.drawings.findIndex(
+          (s) => s.clientId === this.clientId && !s.id, // local shape waiting for ID
+        );
+
+        if (existingIndex !== -1) {
+          // Update local shape with server-assigned ID
+          this.drawings[existingIndex].id = shapeFromServer.id;
+          return;
+        }
+
+        // Otherwise, add new remote shape
+        if (shapeFromServer.clientId !== this.clientId) {
+          this.drawings.push(shapeFromServer);
+        }
+
+        console.log('Received shape from server:', shapeFromServer);
+        this.redrawCanvas();
+      });
+      this.stompClient.subscribe('/topic/erase', (message: IMessage) => {
+        const body = message.body;
+        if (body === 'ALL') {
+          this.drawings = [];
+        } else {
+          const id = Number(body);
+          this.removeShapeById(id);
+        }
+        this.redrawCanvas();
+      });
+    };
+
+    this.stompClient.activate();
   }
 }

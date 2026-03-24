@@ -2,53 +2,56 @@ package com.khalil.whiteboard.realtime_whiteboard.model;
 
 import java.util.List;
 
-public class Stroke {
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
 
-    private String color;
-    private List<point> points;
-    private int width;
+@Entity
+@DiscriminatorValue("stroke")
+public class Stroke extends ShapeEntity {
+    private String type = "pen";
+    private int lineWidth;
 
-    public List<point> getPoints() {
+    @ElementCollection
+    private List<Point> points;
+
+    @Override
+    public String getType() {
+        return type;
+    }
+
+    public int getLineWidth() {
+        return lineWidth;
+    }
+
+    public void setLineWidth(int lineWidth) {
+        this.lineWidth = lineWidth;
+    }
+
+    public List<Point> getPoints() {
         return points;
     }
 
-    public void setPoints(List<point> points) {
+    public void setPoints(List<Point> points) {
         this.points = points;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public static class point {
+    @Embeddable
+    public static class Point {
         private double x;
         private double y;
-
-        public point() {
-        }
 
         public double getX() {
             return x;
         }
 
-        public double getY() {
-            return y;
-        }
-
         public void setX(double x) {
             this.x = x;
+        }
+
+        public double getY() {
+            return y;
         }
 
         public void setY(double y) {
