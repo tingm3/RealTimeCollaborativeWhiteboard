@@ -6,7 +6,7 @@
       "type": "java",
       "name": "RealtimeWhiteboardApplication",
       "request": "launch",
-      "mainClass": "com.khalil.whiteboard.realtime_whiteboard.RealtimeWhiteboardApplication",
+      "mainClass": "com.mthree.realtime_whiteboard.RealtimeWhiteboardApplication",
       "projectName": "realtime-whiteboard"
     },
     {
