@@ -5,13 +5,17 @@ package com.mthree.realtime_whiteboard.auth;
     register() creates a new Artist, hashes the password, saves to the DB, and returns a JWT.
     login() verifies credentials via AuthenticationManager, loads the user, and returns a JWT.
  */
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.mthree.realtime_whiteboard.config.JwtService;
 import com.mthree.realtime_whiteboard.dto.AuthResponse;
+import com.mthree.realtime_whiteboard.dto.ChangePasswordRequest;
+import com.mthree.realtime_whiteboard.dto.ChangeUsernameRequest;
 import com.mthree.realtime_whiteboard.dto.LoginRequest;
 import com.mthree.realtime_whiteboard.dto.RegisterRequest;
 import com.mthree.realtime_whiteboard.model.Artist;
@@ -31,9 +35,7 @@ public class AuthService {
     // hashes the password, saves the new Artist to the DB, generates and returns a JWT
     public AuthResponse register(RegisterRequest request) {
         if (artistRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new org.springframework.web.server.ResponseStatusException(
-                    org.springframework.http.HttpStatus.CONFLICT, "Username already taken"
-            );
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken");
         }
         Artist artist = new Artist();
         artist.setUsername(request.getUsername());
@@ -53,6 +55,39 @@ public class AuthService {
         );
         Artist artist = artistRepository.findByUsername(request.getUsername())
                 .orElseThrow();
+        String token = jwtService.generateToken(artist.getUsername());
+        return new AuthResponse(token, artist.getUsername(), artist.getId());
+    }
+
+    public void deleteAccount(String username) {
+        Artist artist = artistRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        artistRepository.delete(artist);
+    }
+
+    public void changePassword(String username, ChangePasswordRequest request) {
+        Artist artist = artistRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "User not found"
+        ));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), artist.getPasswordHash())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password");
+        }
+
+        artist.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        artistRepository.save(artist);
+    }
+
+    public AuthResponse changeUsername(String currentUsername, ChangeUsernameRequest request) {
+        if (artistRepository.findByUsername(request.getNewUsername()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken");
+
+        }
+        Artist artist = artistRepository.findByUsername(currentUsername)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+        artist.setUsername(request.getNewUsername());
+        artistRepository.save(artist);
         String token = jwtService.generateToken(artist.getUsername());
         return new AuthResponse(token, artist.getUsername(), artist.getId());
     }

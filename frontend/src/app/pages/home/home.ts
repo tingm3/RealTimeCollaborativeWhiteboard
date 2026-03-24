@@ -1,20 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { NgClass, NgFor } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { HeaderHome } from '../../shared/reusableComponent/header/header-home/header-home';
-import { Footer } from '../../shared/reusableComponent/footer/footer';
 
 @Component({
   selector: 'app-home',
-  imports: [HeaderHome, RouterLink, NgClass, Footer],
+  standalone: true,
+  imports: [CommonModule, RouterModule, HeaderHome],
   templateUrl: './home.html',
-  styleUrl: './home.css'
+  styleUrls: ['./home.css']
 })
-export class Home {
-  boards = [
-    { name: 'Q3 Sprint Planning', shared: true },
-    { name: 'App Redesign Flow', shared: true },
-    { name: 'Weekly Retro', shared: false },
-    { name: 'Brainstorm Session', shared: false },
-  ];
-}
+export class Home { }

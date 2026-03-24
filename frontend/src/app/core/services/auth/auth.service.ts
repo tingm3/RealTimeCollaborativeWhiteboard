@@ -18,6 +18,15 @@ export interface RegisterRequest {
   password: string;
 }
 
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface ChangeUsernameRequest {
+  newUsername: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -37,9 +46,27 @@ export class AuthService {
   register(data: RegisterRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.baseUrl}/register`, data).pipe(
       tap({
-        next: (res) => this.storeToken(res)
+        next: (res) => {
+          this.storeToken(res);
+        }
       })
     );
+  }
+
+  changePassword(data: ChangePasswordRequest): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/password`, data);
+  }
+
+  changeUsername(data: ChangeUsernameRequest): Observable<AuthResponse> {
+    return this.http.put<AuthResponse>(`${this.baseUrl}/username`, data).pipe(
+      tap(res => {
+        this.storeToken(res);
+      })
+    );
+  }
+
+  deleteAccount(): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/delete`);
   }
 
   private storeToken(res: AuthResponse): void {

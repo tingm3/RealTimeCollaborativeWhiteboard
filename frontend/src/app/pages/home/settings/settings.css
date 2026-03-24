@@ -1,25 +1,279 @@
-.card {
-  border: 1px solid #ddd;
-  background-color: #fff;
+.settings-page {
+  padding: 2rem 2.5rem;
+  max-width: 600px;
 }
 
-.form-control,
-.form-select {
-  border-radius: 8px;
+.settings-header {
+  margin-bottom: 1.75rem;
 }
 
-button {
-  border-radius: 8px;
+.settings-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #212529;
 }
 
-.btn-primary {
+.settings-subtitle {
+  font-size: 0.8rem;
+  color: #adb5bd;
+  margin-top: 4px;
+}
+
+.settings-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 2rem;
+}
+
+.tab {
+  font-size: 0.8125rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: #6c757d;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.tab:first-child {
+  padding-left: 0;
+}
+
+.tab:hover {
+  color: #212529;
+}
+
+.tab.active {
+  color: #212529;
   font-weight: 500;
+  border-bottom-color: #212529;
 }
 
-.btn-outline-danger {
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #adb5bd;
+  margin-bottom: 0.625rem;
+  margin-top: 1.75rem;
+}
+
+.section-label:first-child {
+  margin-top: 0;
+}
+
+.danger-label {
+  color: #dc3545;
+}
+
+.settings-card {
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.avatar-row {
+  display: flex;
+  align-items: center;
+  padding: 16px 18px;
+  gap: 14px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #e8f4fd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0d6efd;
+  flex-shrink: 0;
+}
+
+.avatar-info {
+  flex: 1;
+}
+
+.avatar-name {
+  font-size: 0.9rem;
   font-weight: 500;
+  color: #212529;
 }
 
-hr {
-  opacity: 0.3;
+.avatar-sub {
+  font-size: 0.75rem;
+  color: #adb5bd;
+  margin-top: 2px;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  padding: 13px 18px;
+  gap: 16px;
+}
+
+.settings-row+.settings-row {
+  border-top: 1px solid #e9ecef;
+}
+
+.row-label {
+  font-size: 0.8125rem;
+  color: #6c757d;
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.row-value {
+  flex: 1;
+  font-size: 0.875rem;
+  color: #212529;
+}
+
+.row-value.muted {
+  color: #adb5bd;
+}
+
+.row-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.row-desc {
+  font-size: 0.75rem;
+  color: #adb5bd;
+  margin-top: 2px;
+}
+
+.btn-edit {
+  height: 30px;
+  padding: 0 12px;
+  font-size: 0.8rem;
+  border-radius: 7px;
+  cursor: pointer;
+  border: 1px solid #dee2e6;
+  background: #fff;
+  color: #212529;
+  transition: background 0.1s;
+  white-space: nowrap;
+}
+
+.btn-edit:hover {
+  background: #f8f9fa;
+}
+
+.expand-panel {
+  border-top: 1px solid #e9ecef;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #f8f9fa;
+}
+
+.expand-input {
+  width: 100%;
+  height: 34px;
+  font-size: 0.875rem;
+  padding: 0 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  outline: none;
+  color: #212529;
+  background: #fff;
+}
+
+.expand-input:focus {
+  border-color: #adb5bd;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.expand-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-save {
+  height: 30px;
+  padding: 0 14px;
+  font-size: 0.8rem;
+  border-radius: 7px;
+  cursor: pointer;
+  background: #212529;
+  color: #fff;
+  border: none;
+  font-weight: 500;
+  transition: opacity 0.1s;
+}
+
+.btn-save:hover {
+  opacity: 0.85;
+}
+
+.btn-save:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  height: 30px;
+  padding: 0 12px;
+  font-size: 0.8rem;
+  border-radius: 7px;
+  cursor: pointer;
+  background: transparent;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+}
+
+.btn-cancel:hover {
+  background: #fff;
+}
+
+.btn-danger {
+  height: 30px;
+  padding: 0 14px;
+  font-size: 0.8rem;
+  border-radius: 7px;
+  cursor: pointer;
+  background: transparent;
+  color: #dc3545;
+  border: 1px solid #f5c2c7;
+  white-space: nowrap;
+}
+
+.btn-danger:hover {
+  background: #fff5f5;
+}
+
+.settings-select {
+  height: 33px;
+  font-size: 0.875rem;
+  padding: 0 10px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: #fff;
+  color: #212529;
+  outline: none;
+  cursor: pointer;
+}
+
+.feedback {
+  font-size: 0.75rem;
+}
+
+.feedback.error {
+  color: #dc3545;
+}
+
+.feedback.success {
+  color: #198754;
 }
