@@ -14,7 +14,15 @@ import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: Landing },
-  { path: 'home', component: Home, canActivate: [authGuard] },
+  {
+    path: 'home',
+    component: Home,
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: HomeContent },
+      { path: 'settings', component: Settings }
+    ]
+  },
   { path: 'favorites', component: Favorites, canActivate: [authGuard] },
   { path: 'settings', component: Settings, canActivate: [authGuard] },
   { path: 'whiteboard', component: Whiteboard, canActivate: [authGuard] }, //TODO: add auth guard and /id after whiteboard

@@ -27,6 +27,15 @@ export interface ChangeUsernameRequest {
   newUsername: string;
 }
 
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface ChangeUsernameRequest {
+  newUsername: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
