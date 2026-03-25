@@ -13,6 +13,10 @@ public abstract class ShapeEntity implements Shape {
 
     private String clientId;
 
+    @ManyToOne
+    @JoinColumn(name = "whiteboard_id")
+    private Whiteboard whiteboard;
+
     @Override
     public Long getId() {
         return id;
@@ -21,5 +25,10 @@ public abstract class ShapeEntity implements Shape {
     @Override
     public String getClientId() {
         return clientId;
+    }
+
+    @Override
+    public Whiteboard getWhiteboard() {
+        return whiteboard;
     }
 }

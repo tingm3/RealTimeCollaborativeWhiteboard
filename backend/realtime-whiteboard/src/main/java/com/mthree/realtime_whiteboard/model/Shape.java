@@ -20,4 +20,6 @@ public interface Shape {
 
     String getType(); // Returns type of shape
 
+    Whiteboard getWhiteboard(); // Reference to the whiteboard it belongs to
+
 }
