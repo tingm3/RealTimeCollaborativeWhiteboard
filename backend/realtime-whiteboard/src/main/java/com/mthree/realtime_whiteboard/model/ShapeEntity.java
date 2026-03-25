@@ -31,4 +31,8 @@ public abstract class ShapeEntity implements Shape {
     public Whiteboard getWhiteboard() {
         return whiteboard;
     }
+
+    public void setWhiteboard(Whiteboard whiteboard) {
+        this.whiteboard = whiteboard;
+    }
 }

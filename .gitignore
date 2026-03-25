@@ -62,3 +62,6 @@ Thumbs.db
 .env.local
 .env.production
 backend/realtime-whiteboard/src/main/resources/application-local.properties
+
+# ─── Metals ────────────
+/.metals/

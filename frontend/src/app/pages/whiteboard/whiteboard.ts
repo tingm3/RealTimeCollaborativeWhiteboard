@@ -17,7 +17,6 @@ export class Whiteboard {
   private ctx!: CanvasRenderingContext2D;
 
   private stompClient!: Stomp.Client;
-  private isConnected = false;
   private clientId = Math.random().toString(36).substr(2, 9); // Unique ID for this client
 
   currentTool: string = 'pen';
@@ -96,7 +95,7 @@ export class Whiteboard {
   }
 
   onSave() {
-    // TODO: Implement save functionality
+    // TODO: Implement save functionality (e.g., export canvas as image or save drawing data)
   }
 
   // =========================
@@ -515,7 +514,6 @@ export class Whiteboard {
     });
 
     this.stompClient.onConnect = (frame) => {
-      this.isConnected = true;
       this.stompClient.subscribe('/topic/drawings', (message: IMessage) => {
         const shapeFromServer = JSON.parse(message.body);
 
