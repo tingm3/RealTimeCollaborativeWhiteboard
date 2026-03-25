@@ -32,9 +32,11 @@ export class Register {
         },
         error: (err) => {
           this.isLoading = false;
-          this.errorMessage = err.status === 400
-            ? 'Username already exists'
-            : 'Something went wrong. Please try again.';
+          if (err.status === 409 || err.status === 400) {
+            this.errorMessage = 'Username already taken';
+          } else {
+            this.errorMessage = 'Something went wrong. Please try again.';
+          }
         }
       });
     }
