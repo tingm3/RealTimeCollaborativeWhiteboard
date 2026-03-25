@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("circle")
 public class Circle extends ShapeEntity {
+
     private String type = "circle";
     private int lineWidth;
     private double x1, y1, x2, y2;

@@ -21,6 +21,15 @@ update_tree() {
   echo "Done!"
 }
 
+
+install_deps() {
+  echo "Checking frontend dependencies..."
+  cd frontend
+  npm install
+  npm install --save-dev @types/sockjs-client
+  cd ..
+}
+
 # Start backend
 start_backend() {
   # Kill any existing process on port 8080
@@ -44,6 +53,8 @@ start_frontend() {
   fi
   cd frontend && ng serve --open
 }
+
 update_tree
+install_deps
 start_backend
 start_frontend
