@@ -10,4 +10,6 @@ import { HeaderHome } from '../../shared/reusableComponent/header/header-home/he
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
-export class Home {}
+export class Home {
+
+}

@@ -25,6 +25,7 @@ export const routes: Routes = [
   },
   { path: 'favorites', component: Favorites, canActivate: [authGuard] },
   { path: 'settings', component: Settings, canActivate: [authGuard] },
+  { path: 'whiteboard', component: Whiteboard }, //this is for guests users
   { path: 'whiteboard/:id', component: Whiteboard, canActivate: [authGuard] },
   { path: 'login', component: Login },
   { path: 'register', component: Register },

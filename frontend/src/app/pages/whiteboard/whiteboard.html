@@ -1,11 +1,46 @@
-<app-header-whiteboard></app-header-whiteboard>
+<app-header-whiteboard (onShare)="openShareModal()"></app-header-whiteboard> <!-- ← add (onShare) -->
 
 <div class="whiteboard-container">
-  <app-toolbar
-    (toolSelected)="onToolSelected($event)"
-    (undo)="onUndo()"
-    (trash)="onTrash()"
-    (save)="onSave()"
-  ></app-toolbar>
+  <app-toolbar (toolSelected)="onToolSelected($event)" (undo)="onUndo()" (trash)="onTrash()"
+    (save)="onSave()"></app-toolbar>
   <canvas #canvas></canvas>
+</div>
+
+<!-- Share Modal -->
+<div *ngIf="showShareModal" class="share-overlay" (click)="closeShareModal()">
+  <div class="share-modal" (click)="$event.stopPropagation()">
+
+    <div class="share-modal__header">
+      <h2>Share Whiteboard</h2>
+      <button class="share-modal__close" (click)="closeShareModal()">✕</button>
+    </div>
+
+    <input class="share-modal__search" type="text" placeholder="Search by name or email..." [(ngModel)]="searchQuery" />
+
+    <div class="share-modal__list">
+      <p class="share-modal__section-label">Add people</p>
+      <div *ngFor="let user of filteredUsers" class="share-modal__user-row" (click)="addCollaborator(user)">
+        <div class="share-modal__avatar">{{ user.username[0].toUpperCase() }}</div>
+        <div class="share-modal__user-info">
+          <span class="share-modal__username">{{ user.username }}</span>
+          <span class="share-modal__email">{{ user.email }}</span>
+        </div>
+        <span class="share-modal__add-btn">+ Add</span>
+      </div>
+      <p *ngIf="filteredUsers.length === 0" class="share-modal__empty">No users found</p>
+    </div>
+
+    <div class="share-modal__collaborators" *ngIf="collaborators.length > 0">
+      <p class="share-modal__section-label">Current collaborators</p>
+      <div *ngFor="let collab of collaborators" class="share-modal__user-row">
+        <div class="share-modal__avatar">{{ collab.username[0].toUpperCase() }}</div>
+        <div class="share-modal__user-info">
+          <span class="share-modal__username">{{ collab.username }}</span>
+          <span class="share-modal__email">{{ collab.email }}</span>
+        </div>
+        <button class="share-modal__remove-btn" (click)="removeCollaborator(collab)">Remove</button>
+      </div>
+    </div>
+
+  </div>
 </div>

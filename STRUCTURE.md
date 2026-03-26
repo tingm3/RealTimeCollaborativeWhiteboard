@@ -23,6 +23,19 @@
 │                   └── com
 │                       └── mthree
 │                           └── whiteboard
+├── doc
+│   ├── entity-relationship-diagram
+│   │   └── erd.png
+│   ├── er-diagram
+│   ├── sequence-diagram
+│   │   └── sequence-diagram.md
+│   ├── system-architecture
+│   │   └── system-architecture.png
+│   └── wireframe
+│       ├── wireframe-account.png
+│       ├── wireframe-home.png
+│       ├── wireframe-landing.png
+│       └── wireframe-whiteboard.png
 ├── frontend
 │   ├── README.md
 │   ├── angular.json
@@ -55,6 +68,9 @@
 │   │   │   │   │   ├── drawing-item.model.ts
 │   │   │   │   │   └── user.model.ts
 │   │   │   │   └── services
+│   │   │   │       ├── artist
+│   │   │   │       │   ├── artist-service.spec.ts
+│   │   │   │       │   └── artist-service.ts
 │   │   │   │       └── auth
 │   │   │   │           ├── auth.service.spec.ts
 │   │   │   │           └── auth.service.ts
@@ -111,6 +127,9 @@
 │   │   │   │   │   ├── terms.spec.ts
 │   │   │   │   │   └── terms.ts
 │   │   │   │   └── whiteboard
+│   │   │   │       ├── services
+│   │   │   │       │   ├── whiteboard-service.spec.ts
+│   │   │   │       │   └── whiteboard-service.ts
 │   │   │   │       ├── whiteboard.css
 │   │   │   │       ├── whiteboard.html
 │   │   │   │       ├── whiteboard.spec.ts

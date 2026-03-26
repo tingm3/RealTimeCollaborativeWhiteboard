@@ -1,3 +1,8 @@
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http'
+import { ActivatedRoute } from '@angular/router';
+;
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Toolbar } from '../../shared/reusableComponent/toolbar/toolbar';
 import { HeaderWhiteboard } from '../../shared/reusableComponent/header/header-whiteboard/header-whiteboard';
@@ -7,7 +12,7 @@ import { Client, IMessage } from '@stomp/stompjs';
 
 @Component({
   selector: 'app-whiteboard',
-  imports: [Toolbar, HeaderWhiteboard],
+  imports: [Toolbar, HeaderWhiteboard, CommonModule, FormsModule],
   templateUrl: './whiteboard.html',
   styleUrl: './whiteboard.css',
 })
@@ -18,9 +23,24 @@ export class Whiteboard {
 
   private stompClient!: Stomp.Client;
   private clientId = Math.random().toString(36).substr(2, 9); // Unique ID for this client
+  constructor(private http: HttpClient, private route: ActivatedRoute) { }
 
   currentTool: string = 'pen';
+  whiteboardId!: number;
+  showShareModal = false;
+  allUsers: { id: number; username: string; email: string }[] = [];
+  collaborators: { id: number; username: string; email: string }[] = [];
+  searchQuery = '';
 
+
+  get filteredUsers() {
+    const q = this.searchQuery.toLowerCase();
+    return this.allUsers.filter(
+      (u) =>
+        (u.username.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)) &&
+        !this.collaborators.find((c) => c.id === u.id)
+    );
+  }
   // Drawing state
   private drawing = false; // Track if currently drawing (for pen, rect, circle)
   private isPanning = false; // Track if the canvas is being dragged
@@ -33,8 +53,14 @@ export class Whiteboard {
   private viewportTransform = {
     x: 0,
     y: 0,
-    scale: 1,
+    scale:
+      1,
   };
+
+  ngOnInit() {
+    this.whiteboardId = Number(this.route.snapshot.paramMap.get('id'));
+    console.log('whiteboardId:', this.whiteboardId);
+  }
 
   ngAfterViewInit() {
     this.connect();
@@ -96,6 +122,43 @@ export class Whiteboard {
 
   onSave() {
     // TODO: Implement save functionality (e.g., export canvas as image or save drawing data)
+  }
+  openShareModal() {
+    this.showShareModal = true;
+    this.searchQuery = '';
+
+    this.http
+      .get<{ id: number; username: string; email: string }[]>('http://localhost:8080/api/artists')
+      .subscribe((users) => (this.allUsers = users));
+
+    this.http
+      .get<{ id: number; username: string; email: string }[]>(
+        `http://localhost:8080/whiteboards/${this.whiteboardId}/collaborators`  // no /api
+      )
+      .subscribe((collabs) => (this.collaborators = collabs));
+  }
+
+
+  closeShareModal() {
+    this.showShareModal = false;
+  }
+
+  addCollaborator(user: { id: number; username: string; email: string }) {
+    this.http
+      .post(`http://localhost:8080/api/whiteboards/${this.whiteboardId}/collaborators`, {
+        userId: user.id,
+      })
+      .subscribe(() => {
+        this.collaborators.push(user);
+      });
+  }
+
+  removeCollaborator(user: { id: number; username: string; email: string }) {
+    this.http
+      .delete(`http://localhost:8080/api/whiteboards/${this.whiteboardId}/collaborators/${user.id}`)
+      .subscribe(() => {
+        this.collaborators = this.collaborators.filter((c) => c.id !== user.id);
+      });
   }
 
   // =========================

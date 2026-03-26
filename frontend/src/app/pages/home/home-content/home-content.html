@@ -12,7 +12,7 @@
   </div>
 
   <!-- Board Card -->
-  <div class="board-card" *ngFor="let board of boards">
+  <div class="board-card" *ngFor="let board of boards" (click)="openBoard(board)" (click)="openBoard(board)">
     <div class="board-thumbnail">
       <div class="board-thumbnail-inner"></div>
     </div>
@@ -24,10 +24,7 @@
         </button>
       </div>
       <div class="board-info">
-        <span
-          class="badge-board"
-          [ngClass]="(board.collaborators?.length ?? 0) > 1 ? 'badge-shared' : 'badge-private'"
-        >
+        <span class="badge-board" [ngClass]="(board.collaborators?.length ?? 0) > 1 ? 'badge-shared' : 'badge-private'">
           {{ (board.collaborators?.length ?? 0) > 1 ? 'Shared' : 'Only you' }}
         </span>
       </div>

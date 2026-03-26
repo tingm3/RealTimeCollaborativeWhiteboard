@@ -1,7 +1,8 @@
 import { NgIf } from '@angular/common';
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-header-whiteboard',
@@ -12,8 +13,30 @@ import { RouterLink } from '@angular/router';
 export class HeaderWhiteboard {
   boardTitle = 'Project Whiteboard';
   isEditing = false;
+  isDropdownOpen = false;
+
+  @Output() onShare = new EventEmitter<void>();
 
   @ViewChild('titleInput') titleInput!: ElementRef;
+
+  constructor(public authService: AuthService, private router: Router) { }
+
+  get currentUsername(): string {
+    return localStorage.getItem('username') || 'Guest';
+  }
+
+  get initials(): string {
+    return this.currentUsername.slice(0, 1).toUpperCase();
+  }
+
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 
   startEditing() {
     this.isEditing = true;

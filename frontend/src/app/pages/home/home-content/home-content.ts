@@ -18,7 +18,7 @@ export class HomeContent implements OnInit {
     private whiteboardService: WhiteboardService,
     private artistService: ArtistService,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadBoards();
@@ -53,5 +53,8 @@ export class HomeContent implements OnInit {
       this.boards = boards;
       console.log('Loaded boards:', this.boards);
     });
+  }
+  openBoard(board: Whiteboard) {
+    this.router.navigate(['/whiteboard', board.id]);
   }
 }
