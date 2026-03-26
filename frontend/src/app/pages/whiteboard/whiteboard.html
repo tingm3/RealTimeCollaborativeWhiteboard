@@ -15,17 +15,23 @@
       <button class="share-modal__close" (click)="closeShareModal()">✕</button>
     </div>
 
-    <input class="share-modal__search" type="text" placeholder="Search by name or email..." [(ngModel)]="searchQuery" />
+    <input class="share-modal__search" type="text" placeholder="Search by name" [(ngModel)]="searchQuery" />
 
     <div class="share-modal__list">
       <p class="share-modal__section-label">Add people</p>
-      <div *ngFor="let user of filteredUsers" class="share-modal__user-row" (click)="addCollaborator(user)">
+      <div *ngFor="let user of filteredUsers" class="share-modal__user-row">
         <div class="share-modal__avatar">{{ user.username[0].toUpperCase() }}</div>
         <div class="share-modal__user-info">
           <span class="share-modal__username">{{ user.username }}</span>
           <span class="share-modal__email">{{ user.email }}</span>
         </div>
-        <span class="share-modal__add-btn">+ Add</span>
+        <!-- <select [(ngModel)]="selectedPermission[user.id]" class="share-modal__permission">
+          <option value="READ">Viewer</option>
+          <option value="WRITE">Editor</option>
+        </select> -->
+        <span class="share-modal__add-btn" (click)="addCollaborator(user)" *ngIf="!recentlyAdded.includes(user.id)">+
+          Add</span>
+        <span class="share-modal__add-btn" style="color: green" *ngIf="recentlyAdded.includes(user.id)">✓ Added!</span>
       </div>
       <p *ngIf="filteredUsers.length === 0" class="share-modal__empty">No users found</p>
     </div>
@@ -38,7 +44,10 @@
           <span class="share-modal__username">{{ collab.username }}</span>
           <span class="share-modal__email">{{ collab.email }}</span>
         </div>
-        <button class="share-modal__remove-btn" (click)="removeCollaborator(collab)">Remove</button>
+        <button class="share-modal__remove-btn" *ngIf="collab.id !== currentArtistId"
+          (click)="removeCollaborator(collab)">
+          Remove
+        </button>
       </div>
     </div>
 

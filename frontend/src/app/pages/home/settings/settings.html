@@ -7,7 +7,6 @@
   <div class="settings-tabs">
     <div class="tab" [class.active]="activeTab === 'account'" (click)="activeTab = 'account'">Account</div>
     <div class="tab" [class.active]="activeTab === 'security'" (click)="activeTab = 'security'">Security</div>
-    <div class="tab" [class.active]="activeTab === 'appearance'" (click)="activeTab = 'appearance'">Appearance</div>
   </div>
 
   <!-- Account Tab -->
@@ -86,19 +85,5 @@
     </div>
   </div>
 
-  <!-- Appearance Tab -->
-  <div *ngIf="activeTab === 'appearance'">
-    <p class="section-label">Display</p>
-    <div class="settings-card">
-      <div class="settings-row">
-        <span class="row-label">Theme</span>
-        <span class="row-value"></span>
-        <select class="settings-select" [(ngModel)]="theme" (change)="updateTheme()">
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-      </div>
-    </div>
-  </div>
 
 </div>

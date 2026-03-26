@@ -17,6 +17,7 @@ import { Client, IMessage } from '@stomp/stompjs';
   styleUrl: './whiteboard.css',
 })
 export class Whiteboard {
+  recentlyAdded: number[] = [];
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
   private ctx!: CanvasRenderingContext2D;
@@ -61,6 +62,8 @@ export class Whiteboard {
     this.whiteboardId = Number(this.route.snapshot.paramMap.get('id'));
     console.log('whiteboardId:', this.whiteboardId);
   }
+  currentArtistId = Number(localStorage.getItem('artistId'));
+
 
   ngAfterViewInit() {
     this.connect();
@@ -124,16 +127,21 @@ export class Whiteboard {
     // TODO: Implement save functionality (e.g., export canvas as image or save drawing data)
   }
   openShareModal() {
+    console.log('openShareModal called');
     this.showShareModal = true;
     this.searchQuery = '';
 
+    const currentArtistId = Number(localStorage.getItem('artistId'));
+
     this.http
-      .get<{ id: number; username: string; email: string }[]>('http://localhost:8080/api/artists')
-      .subscribe((users) => (this.allUsers = users));
+      .get<{ id: number; username: string; email: string }[]>('http://localhost:8080/artists')
+      .subscribe((users) => {
+        this.allUsers = users.filter(u => u.id !== currentArtistId); // exclude yourself
+      });
 
     this.http
       .get<{ id: number; username: string; email: string }[]>(
-        `http://localhost:8080/whiteboards/${this.whiteboardId}/collaborators`  // no /api
+        `http://localhost:8080/whiteboards/${this.whiteboardId}/collaborators`
       )
       .subscribe((collabs) => (this.collaborators = collabs));
   }
@@ -143,19 +151,36 @@ export class Whiteboard {
     this.showShareModal = false;
   }
 
+  selectedPermission: { [userId: number]: string } = {};
+
   addCollaborator(user: { id: number; username: string; email: string }) {
+    const permission = this.selectedPermission[user.id] || 'READ';
     this.http
-      .post(`http://localhost:8080/api/whiteboards/${this.whiteboardId}/collaborators`, {
+      .post(`http://localhost:8080/whiteboards/${this.whiteboardId}/collaborators`, {
         userId: user.id,
+        permission: permission
       })
-      .subscribe(() => {
-        this.collaborators.push(user);
+      .subscribe({
+        next: () => {
+          this.collaborators.push(user);
+          this.recentlyAdded.push(user.id);
+          delete this.selectedPermission[user.id];
+
+          // clear the "Added!" indicator after 2 seconds
+          setTimeout(() => {
+            this.recentlyAdded = this.recentlyAdded.filter(id => id !== user.id);
+          }, 2000);
+        },
+        error: (err) => {
+          console.error('Failed to add collaborator', err);
+          alert('Failed to add collaborator. Please try again.');
+        }
       });
   }
 
   removeCollaborator(user: { id: number; username: string; email: string }) {
     this.http
-      .delete(`http://localhost:8080/api/whiteboards/${this.whiteboardId}/collaborators/${user.id}`)
+      .delete(`http://localhost:8080/whiteboards/${this.whiteboardId}/collaborators/${user.id}`)
       .subscribe(() => {
         this.collaborators = this.collaborators.filter((c) => c.id !== user.id);
       });

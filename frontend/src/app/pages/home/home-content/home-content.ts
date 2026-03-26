@@ -57,4 +57,13 @@ export class HomeContent implements OnInit {
   openBoard(board: Whiteboard) {
     this.router.navigate(['/whiteboard', board.id]);
   }
+
+  deleteBoard(event: Event, board: Whiteboard) {
+    event.stopPropagation(); // prevent opening the board
+    if (!confirm(`Delete "${board.name}"?`)) return;
+    this.whiteboardService.deleteWhiteboard(board.id!).subscribe({
+      next: () => this.boards = this.boards.filter(b => b.id !== board.id),
+      error: (err) => console.error('Failed to delete board', err),
+    });
+  }
 }

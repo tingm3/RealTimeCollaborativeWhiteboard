@@ -17,7 +17,7 @@ import com.mthree.realtime_whiteboard.model.Artist;
 import com.mthree.realtime_whiteboard.repository.ArtistRepository;
 
 @RestController
-@RequestMapping("/api/artists")
+@RequestMapping("/artists")
 @CrossOrigin(origins = "http://localhost:4200")
 public class ArtistController {
 

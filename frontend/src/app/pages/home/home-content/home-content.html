@@ -19,8 +19,8 @@
     <div class="board-meta">
       <div class="d-flex align-items-center justify-content-between">
         <span class="board-name">{{ board.name }}</span>
-        <button class="btn btn-link btn-sm text-muted p-0">
-          <i class="bi bi-three-dots"></i>
+        <button class="btn btn-link btn-sm text-danger p-0" (click)="deleteBoard($event, board)" title="Delete board">
+          <i class="bi bi-trash"></i>
         </button>
       </div>
       <div class="board-info">

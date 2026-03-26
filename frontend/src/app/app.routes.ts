@@ -8,9 +8,9 @@ import { Landing } from './pages/landing/landing';
 import { Privacy } from './pages/privacy/privacy';
 import { Terms } from './pages/terms/terms';
 import { Contact } from './pages/contact/contact';
-import { Favorites } from './pages/favorites/favorites';
 import { Settings } from './pages/home/settings/settings';
 import { authGuard } from './core/guards/auth.guard';
+import { Shared } from './pages/shared/shared';
 
 export const routes: Routes = [
   { path: '', component: Landing },
@@ -23,7 +23,7 @@ export const routes: Routes = [
       { path: 'settings', component: Settings },
     ],
   },
-  { path: 'favorites', component: Favorites, canActivate: [authGuard] },
+  { path: 'shared', component: Shared, canActivate: [authGuard] },
   { path: 'settings', component: Settings, canActivate: [authGuard] },
   { path: 'whiteboard', component: Whiteboard }, //this is for guests users
   { path: 'whiteboard/:id', component: Whiteboard, canActivate: [authGuard] },

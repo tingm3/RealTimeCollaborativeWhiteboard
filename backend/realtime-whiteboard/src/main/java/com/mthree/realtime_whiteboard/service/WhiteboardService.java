@@ -39,4 +39,14 @@ public class WhiteboardService {
     public List<Whiteboard> getAllWhiteboards() {
         return whiteboardRepository.findAll();
     }
+
+    public void deleteWhiteboard(Long id, Artist artist) {
+        Whiteboard whiteboard = whiteboardRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Whiteboard not found"));
+
+        if (!whiteboard.getCreatedBy().getId().equals(artist.getId())) {
+            throw new RuntimeException("Only the creator can delete this whiteboard");
+        }
+        whiteboardRepository.delete(whiteboard);
+    }
 }
