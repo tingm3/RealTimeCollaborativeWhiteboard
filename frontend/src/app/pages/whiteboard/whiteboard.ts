@@ -29,16 +29,17 @@ export class Whiteboard {
   currentTool: string = 'pen';
   whiteboardId!: number;
   showShareModal = false;
-  allUsers: { id: number; username: string; email: string }[] = [];
-  collaborators: { id: number; username: string; email: string }[] = [];
+  allUsers: { id: number; username: string; }[] = [];
+  collaborators: { id: number; username: string }[] = [];
   searchQuery = '';
 
 
   get filteredUsers() {
-    const q = this.searchQuery.toLowerCase();
+    const q = this.searchQuery.toLowerCase().trim();
+    if (!q) return this.allUsers.filter(u => !this.collaborators.find(c => c.id === u.id));
     return this.allUsers.filter(
       (u) =>
-        (u.username.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)) &&
+        u.username.toLowerCase().includes(q) &&
         !this.collaborators.find((c) => c.id === u.id)
     );
   }
@@ -134,13 +135,13 @@ export class Whiteboard {
     const currentArtistId = Number(localStorage.getItem('artistId'));
 
     this.http
-      .get<{ id: number; username: string; email: string }[]>('http://localhost:8080/artists')
+      .get<{ id: number; username: string; }[]>('http://localhost:8080/artists')
       .subscribe((users) => {
         this.allUsers = users.filter(u => u.id !== currentArtistId); // exclude yourself
       });
 
     this.http
-      .get<{ id: number; username: string; email: string }[]>(
+      .get<{ id: number; username: string; }[]>(
         `http://localhost:8080/whiteboards/${this.whiteboardId}/collaborators`
       )
       .subscribe((collabs) => (this.collaborators = collabs));
@@ -153,7 +154,7 @@ export class Whiteboard {
 
   selectedPermission: { [userId: number]: string } = {};
 
-  addCollaborator(user: { id: number; username: string; email: string }) {
+  addCollaborator(user: { id: number; username: string; }) {
     const permission = this.selectedPermission[user.id] || 'READ';
     this.http
       .post(`http://localhost:8080/whiteboards/${this.whiteboardId}/collaborators`, {
@@ -178,7 +179,7 @@ export class Whiteboard {
       });
   }
 
-  removeCollaborator(user: { id: number; username: string; email: string }) {
+  removeCollaborator(user: { id: number; username: string; }) {
     this.http
       .delete(`http://localhost:8080/whiteboards/${this.whiteboardId}/collaborators/${user.id}`)
       .subscribe(() => {

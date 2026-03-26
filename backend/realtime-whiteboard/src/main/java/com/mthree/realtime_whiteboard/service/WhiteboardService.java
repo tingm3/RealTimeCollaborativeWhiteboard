@@ -40,6 +40,17 @@ public class WhiteboardService {
         return whiteboardRepository.findAll();
     }
 
+    public List<Whiteboard> search(String title, String artist) {
+        if (title != null && artist != null) {
+            return whiteboardRepository.findByNameContainingIgnoreCaseAndCreatedBy_UsernameContainingIgnoreCase(title, artist);
+        } else if (title != null) {
+            return whiteboardRepository.findByNameContainingIgnoreCase(title);
+        } else if (artist != null) {
+            return whiteboardRepository.findByCreatedBy_UsernameContainingIgnoreCase(artist);
+        }
+        return whiteboardRepository.findAll();
+    }
+
     public void deleteWhiteboard(Long id, Artist artist) {
         Whiteboard whiteboard = whiteboardRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Whiteboard not found"));

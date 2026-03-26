@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { Whiteboard, WhiteboardService } from '../../whiteboard/services/whiteboard-service';
 import { ArtistService } from '../../../core/services/artist/artist-service';
+import { SearchService } from '../../../core/services/search/searchService';
 
 @Component({
   selector: 'app-home-content',
@@ -13,15 +14,23 @@ import { ArtistService } from '../../../core/services/artist/artist-service';
 })
 export class HomeContent implements OnInit {
   boards: Whiteboard[] = [];
+  searchTitle = '';
+  searchArtist = '';
 
   constructor(
     private whiteboardService: WhiteboardService,
     private artistService: ArtistService,
     private router: Router,
+    public searchService: SearchService
   ) { }
 
   ngOnInit() {
     this.loadBoards();
+    this.searchService.query$.subscribe(q => {
+      this.whiteboardService.search(q, '').subscribe(boards => {
+        this.boards = boards;
+      });
+    });
   }
 
   createBoard() {
@@ -64,6 +73,11 @@ export class HomeContent implements OnInit {
     this.whiteboardService.deleteWhiteboard(board.id!).subscribe({
       next: () => this.boards = this.boards.filter(b => b.id !== board.id),
       error: (err) => console.error('Failed to delete board', err),
+    });
+  }
+  search() {
+    this.whiteboardService.search(this.searchTitle, this.searchArtist).subscribe((boards) => {
+      this.boards = boards;
     });
   }
 }

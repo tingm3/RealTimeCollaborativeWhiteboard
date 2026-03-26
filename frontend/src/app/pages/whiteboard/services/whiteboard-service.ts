@@ -29,4 +29,11 @@ export class WhiteboardService {
   deleteWhiteboard(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  search(title?: string, artist?: string): Observable<Whiteboard[]> {
+    const params: any = {};
+    if (title) params.title = title;
+    if (artist) params.artist = artist;
+    return this.http.get<Whiteboard[]>(`${this.apiUrl}/search`, { params });
+  }
 }

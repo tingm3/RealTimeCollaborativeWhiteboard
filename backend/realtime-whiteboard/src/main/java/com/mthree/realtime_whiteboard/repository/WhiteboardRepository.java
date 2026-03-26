@@ -11,4 +11,11 @@ public interface WhiteboardRepository extends JpaRepository<Whiteboard, Long> {
 
     List<Whiteboard> findByCollaboratorsContaining(Artist artist);
 
+    List<Whiteboard> findByCreatedBy(Artist artist);
+
+    List<Whiteboard> findByNameContainingIgnoreCase(String name);
+
+    List<Whiteboard> findByCreatedBy_UsernameContainingIgnoreCase(String username);
+
+    List<Whiteboard> findByNameContainingIgnoreCaseAndCreatedBy_UsernameContainingIgnoreCase(String name, String username);
 }

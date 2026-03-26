@@ -23,7 +23,6 @@
         <div class="share-modal__avatar">{{ user.username[0].toUpperCase() }}</div>
         <div class="share-modal__user-info">
           <span class="share-modal__username">{{ user.username }}</span>
-          <span class="share-modal__email">{{ user.email }}</span>
         </div>
         <!-- <select [(ngModel)]="selectedPermission[user.id]" class="share-modal__permission">
           <option value="READ">Viewer</option>
@@ -42,7 +41,6 @@
         <div class="share-modal__avatar">{{ collab.username[0].toUpperCase() }}</div>
         <div class="share-modal__user-info">
           <span class="share-modal__username">{{ collab.username }}</span>
-          <span class="share-modal__email">{{ collab.email }}</span>
         </div>
         <button class="share-modal__remove-btn" *ngIf="collab.id !== currentArtistId"
           (click)="removeCollaborator(collab)">
