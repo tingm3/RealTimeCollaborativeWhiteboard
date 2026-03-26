@@ -4,7 +4,7 @@
 
 <div class="boards-grid">
   <!-- New Board Card -->
-  <div class="board-card board-card-new" routerLink="/whiteboard">
+  <div class="board-card board-card-new" (click)="createBoard()">
     <div class="new-board-inner">
       <i class="bi bi-plus-lg fs-4 text-primary"></i>
       <span class="text-primary fw-semibold mt-1">New board</span>
@@ -24,14 +24,17 @@
         </button>
       </div>
       <div class="board-info">
-        <span class="badge-board" [ngClass]="board.shared ? 'badge-shared' : 'badge-private'">
-          {{ board.shared ? 'Shared' : 'Only you' }}
+        <span
+          class="badge-board"
+          [ngClass]="(board.collaborators?.length ?? 0) > 1 ? 'badge-shared' : 'badge-private'"
+        >
+          {{ (board.collaborators?.length ?? 0) > 1 ? 'Shared' : 'Only you' }}
         </span>
       </div>
     </div>
   </div>
 </div>
 
-<button class="btn-new-board" routerLink="/whiteboard">
+<button class="btn-new-board" (click)="createBoard()">
   <i class="bi bi-plus-lg me-2"></i> New board
 </button>

@@ -20,12 +20,12 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: '', component: HomeContent },
-      { path: 'settings', component: Settings }
-    ]
+      { path: 'settings', component: Settings },
+    ],
   },
   { path: 'favorites', component: Favorites, canActivate: [authGuard] },
   { path: 'settings', component: Settings, canActivate: [authGuard] },
-  { path: 'whiteboard', component: Whiteboard, canActivate: [authGuard] }, //TODO: add auth guard and /id after whiteboard
+  { path: 'whiteboard/:id', component: Whiteboard, canActivate: [authGuard] },
   { path: 'login', component: Login },
   { path: 'register', component: Register },
   { path: 'privacy', component: Privacy },

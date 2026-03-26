@@ -1,24 +1,42 @@
 package com.mthree.realtime_whiteboard.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.mthree.realtime_whiteboard.model.Artist;
 import com.mthree.realtime_whiteboard.model.ShapeEntity;
 import com.mthree.realtime_whiteboard.model.Whiteboard;
+import com.mthree.realtime_whiteboard.repository.ArtistRepository;
 import com.mthree.realtime_whiteboard.repository.WhiteboardRepository;
 
 @Service
 public class WhiteboardService {
 
     private final WhiteboardRepository whiteboardRepository;
+    private final ArtistRepository artistRepository;
 
-    public WhiteboardService(WhiteboardRepository whiteboardRepository) {
+    public WhiteboardService(WhiteboardRepository whiteboardRepository, ArtistRepository artistRepository) {
         this.whiteboardRepository = whiteboardRepository;
+        this.artistRepository = artistRepository;
     }
 
-    public Whiteboard saveWhiteboard(Whiteboard whiteboard) {
+    public Whiteboard saveWhiteboard(Whiteboard whiteboard, Artist artist) {
+
+        Artist managedArtist = artistRepository.findById(artist.getId())
+                .orElseThrow(() -> new RuntimeException("Artist not found"));
+
+        whiteboard.setCreatedBy(managedArtist);
+
+        whiteboard.setCollaborators(List.of(managedArtist)); // add creator as initial collaborator
+
         for (ShapeEntity shape : whiteboard.getShapes()) {
             shape.setWhiteboard(whiteboard);
         }
         return whiteboardRepository.save(whiteboard);
+    }
+
+    public List<Whiteboard> getAllWhiteboards() {
+        return whiteboardRepository.findAll();
     }
 }

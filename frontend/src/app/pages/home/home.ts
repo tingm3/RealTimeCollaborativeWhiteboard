@@ -8,6 +8,6 @@ import { HeaderHome } from '../../shared/reusableComponent/header/header-home/he
   standalone: true,
   imports: [CommonModule, RouterModule, HeaderHome],
   templateUrl: './home.html',
-  styleUrls: ['./home.css']
+  styleUrls: ['./home.css'],
 })
-export class Home { }
+export class Home {}
