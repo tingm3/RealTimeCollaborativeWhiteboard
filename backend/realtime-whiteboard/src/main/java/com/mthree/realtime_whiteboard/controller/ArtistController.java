@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,16 +31,19 @@ public class ArtistController {
         return artistRepository.findAll();
     }
 
-    // Get artist by ID
     @GetMapping("/{id}")
-    public Optional<Artist> getArtistById(@PathVariable Long id) {
-        return artistRepository.findById(id);
+    public ResponseEntity<Artist> getArtistById(@PathVariable Long id) {
+        return artistRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // Get artist by username
-    @GetMapping("/by-username/{username}")
-    public Optional<Artist> getArtistByUsername(@PathVariable String username) {
-        return artistRepository.findByUsername(username);
+    @GetMapping("/username/{username}")
+    public ResponseEntity<Artist> getArtistByUsername(@PathVariable String username) {
+        return artistRepository.findByUsername(username)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // Create new artist

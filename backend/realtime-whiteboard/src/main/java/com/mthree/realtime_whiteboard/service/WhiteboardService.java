@@ -42,7 +42,8 @@ public class WhiteboardService {
 
     public List<Whiteboard> search(String title, String artist) {
         if (title != null && artist != null) {
-            return whiteboardRepository.findByNameContainingIgnoreCaseAndCreatedBy_UsernameContainingIgnoreCase(title, artist);
+            return whiteboardRepository.findByNameContainingIgnoreCaseAndCreatedBy_UsernameContainingIgnoreCase(title,
+                    artist);
         } else if (title != null) {
             return whiteboardRepository.findByNameContainingIgnoreCase(title);
         } else if (artist != null) {

@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Whiteboard, WhiteboardService } from '../../whiteboard/services/whiteboard-service';
+import {
+  API_URL,
+  Whiteboard,
+  WhiteboardService,
+} from '../../whiteboard/services/whiteboard-service';
 import { ArtistService } from '../../../core/services/artist/artist-service';
 import { SearchService } from '../../../core/services/search/searchService';
 
@@ -9,6 +13,10 @@ import { SearchService } from '../../../core/services/search/searchService';
   selector: 'app-home-content',
   standalone: true,
   imports: [CommonModule, RouterModule],
+  providers: [
+    WhiteboardService,
+    { provide: API_URL, useValue: 'http://localhost:8080/whiteboards' },
+  ],
   templateUrl: './home-content.html',
   styleUrls: ['./home-content.css'],
 })
@@ -21,21 +29,24 @@ export class HomeContent implements OnInit {
     private whiteboardService: WhiteboardService,
     private artistService: ArtistService,
     private router: Router,
-    public searchService: SearchService
-  ) { }
+    public searchService: SearchService,
+  ) {}
 
   ngOnInit() {
     this.loadBoards();
-    this.searchService.query$.subscribe(q => {
-      this.whiteboardService.search(q, '').subscribe(boards => {
-        this.boards = boards;
+    this.searchService.query$.subscribe((q) => {
+      this.whiteboardService.search(q, '').subscribe((boards) => {
+        const myBoards = boards.filter(
+          (board) => board.createdBy?.id === Number(localStorage.getItem('artistId')),
+        );
+        this.boards = myBoards;
       });
     });
   }
 
   createBoard() {
     const name = prompt('Enter name of whiteboard:') || 'New Board';
-    const artistId = Number(localStorage.getItem('id'));
+    const artistId = Number(localStorage.getItem('artistId'));
     // fetch the artist first
     this.artistService.getArtistById(artistId).subscribe({
       next: (artist) => {
@@ -59,10 +70,15 @@ export class HomeContent implements OnInit {
 
   loadBoards() {
     this.whiteboardService.getAllWhiteboards().subscribe((boards) => {
-      this.boards = boards;
+      console.log('Retrieved boards:', this.boards);
+      const myBoards = boards.filter(
+        (board) => board.createdBy?.id === Number(localStorage.getItem('artistId')),
+      );
+      this.boards = myBoards;
       console.log('Loaded boards:', this.boards);
     });
   }
+
   openBoard(board: Whiteboard) {
     this.router.navigate(['/whiteboard', board.id]);
   }
@@ -71,13 +87,8 @@ export class HomeContent implements OnInit {
     event.stopPropagation(); // prevent opening the board
     if (!confirm(`Delete "${board.name}"?`)) return;
     this.whiteboardService.deleteWhiteboard(board.id!).subscribe({
-      next: () => this.boards = this.boards.filter(b => b.id !== board.id),
+      next: () => (this.boards = this.boards.filter((b) => b.id !== board.id)),
       error: (err) => console.error('Failed to delete board', err),
-    });
-  }
-  search() {
-    this.whiteboardService.search(this.searchTitle, this.searchArtist).subscribe((boards) => {
-      this.boards = boards;
     });
   }
 }

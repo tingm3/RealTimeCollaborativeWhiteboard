@@ -24,11 +24,11 @@ import jakarta.transaction.Transactional;
 @RequestMapping("/whiteboards")
 public class WhiteboardController {
 
-    private final WhiteboardService service;
+    private final WhiteboardService whiteboardService;
     private final CollaboratorService collaboratorService;
 
-    public WhiteboardController(WhiteboardService service, CollaboratorService collaboratorService) {
-        this.service = service;
+    public WhiteboardController(WhiteboardService whiteboardService, CollaboratorService collaboratorService) {
+        this.whiteboardService = whiteboardService;
         this.collaboratorService = collaboratorService;
     }
 
@@ -36,27 +36,13 @@ public class WhiteboardController {
     @PostMapping
     public Whiteboard create(@RequestBody Whiteboard whiteboard,
             @AuthenticationPrincipal Artist artist) {
-        return service.saveWhiteboard(whiteboard, artist);
+        return whiteboardService.saveWhiteboard(whiteboard, artist);
     }
 
     // GET /whiteboards
     @GetMapping
     public List<Whiteboard> getAll() {
-        return service.getAllWhiteboards();
-    }
-
-    @GetMapping("/search")
-    public List<Whiteboard> search(
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String artist) {
-        return service.search(title, artist);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id,
-            @AuthenticationPrincipal Artist artist) {
-        service.deleteWhiteboard(id, artist);
-        return ResponseEntity.ok().build();
+        return whiteboardService.getAllWhiteboards();
     }
 
     @GetMapping("/shared")
@@ -65,4 +51,24 @@ public class WhiteboardController {
         List<Whiteboard> shared = collaboratorService.getSharedBoards(artist);
         return ResponseEntity.ok(shared);
     }
+
+    @GetMapping("/search")
+    public List<Whiteboard> search(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String artist) {
+        return whiteboardService.search(title, artist);
+    }
+
+    @GetMapping("/shared/search")
+    public List<Whiteboard> searchShared(@AuthenticationPrincipal Artist artist, String title, String creatorUsername) {
+        return collaboratorService.searchShared(artist, title, creatorUsername);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id,
+            @AuthenticationPrincipal Artist artist) {
+        whiteboardService.deleteWhiteboard(id, artist);
+        return ResponseEntity.ok().build();
+    }
+
 }

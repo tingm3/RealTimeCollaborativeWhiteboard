@@ -48,4 +48,16 @@ public class CollaboratorService {
                 .filter(w -> !w.getCreatedBy().getId().equals(artist.getId()))
                 .toList();
     }
+
+    public List<Whiteboard> searchShared(Artist artist, String title, String creatorUsername) {
+        return getSharedBoards(artist).stream()
+                // filter by title if provided
+                .filter(w -> title == null
+                        || (w.getName() != null && w.getName().toLowerCase().contains(title.toLowerCase())))
+                // filter by creator username if provided
+                .filter(w -> creatorUsername == null ||
+                        (w.getCreatedBy() != null && w.getCreatedBy().getUsername() != null &&
+                                w.getCreatedBy().getUsername().toLowerCase().contains(creatorUsername.toLowerCase())))
+                .toList();
+    }
 }
