@@ -16,7 +16,10 @@ update_tree() {
   echo "\`\`\`" >> STRUCTURE.md
   echo "." >> STRUCTURE.md
   echo "├── backend" >> STRUCTURE.md
-  tree -L 8 --noreport -I 'node_modules|.git|dist|target' >> STRUCTURE.md
+  tree backend -L 12 --noreport -I 'node_modules|.git|dist|target' | tail -n +2 >> STRUCTURE.md
+  echo "├── frontend" >> STRUCTURE.md
+    tree frontend -L 8 --noreport -I 'node_modules|.git|dist|target' | tail -n +2 >> STRUCTURE.md
+
   echo "\`\`\`" >> STRUCTURE.md
   echo "Done!"
 }

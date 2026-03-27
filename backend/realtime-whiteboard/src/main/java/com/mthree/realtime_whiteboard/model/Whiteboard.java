@@ -10,8 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -42,7 +40,7 @@ public class Whiteboard {
     @OneToMany(mappedBy = "whiteboard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ShapeEntity> shapes = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "whiteboard_collaborators", joinColumns = @JoinColumn(name = "whiteboard_id"), inverseJoinColumns = @JoinColumn(name = "artist_id"))
-    private List<Artist> collaborators = new ArrayList<>();
+    @OneToMany(mappedBy = "whiteboard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BoardCollaborator> collaborators = new ArrayList<>();
+
 }
