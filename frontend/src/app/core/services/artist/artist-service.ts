@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 export interface Artist {
   id: number;
-  username?: string;
+  username: string;
   passwordHash?: string;
 }
 
@@ -22,5 +22,9 @@ export class ArtistService {
 
   getArtistByUsername(username: string): Observable<Artist> {
     return this.http.get<Artist>(`${this.apiUrl}/by-username/${username}`);
+  }
+
+  getAllArtists(): Observable<Artist[]> {
+    return this.http.get<Artist[]>(this.apiUrl);
   }
 }

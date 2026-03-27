@@ -34,8 +34,9 @@ public class CollaboratorController {
     public void addCollaborator(
             @PathVariable Long whiteboardId,
             @RequestBody Map<String, Object> body) {
-        Long userId = Long.valueOf(body.get("userId").toString());
-        // PermissionRole permission = PermissionRole.valueOf(body.get("permission").toString());
+        Long userId = Long.valueOf(body.get("artistId").toString());
+        // PermissionRole permission =
+        // PermissionRole.valueOf(body.get("permission").toString());
         collaboratorService.addCollaborator(whiteboardId, userId);
     }
 

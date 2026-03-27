@@ -1,10 +1,13 @@
 package com.mthree.realtime_whiteboard.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("rect")
+@JsonTypeName("rect")
 public class Rectangle extends ShapeEntity {
     private String type = "rect";
     private int lineWidth;

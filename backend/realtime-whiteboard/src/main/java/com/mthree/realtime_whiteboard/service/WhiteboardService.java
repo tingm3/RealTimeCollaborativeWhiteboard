@@ -1,7 +1,9 @@
 package com.mthree.realtime_whiteboard.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import com.mthree.realtime_whiteboard.model.Artist;
@@ -28,16 +30,47 @@ public class WhiteboardService {
 
         whiteboard.setCreatedBy(managedArtist);
 
-        whiteboard.setCollaborators(List.of(managedArtist)); // add creator as initial collaborator
+        whiteboard.setCollaborators(new ArrayList<>(List.of(managedArtist))); // add creator as initial collaborator
 
-        for (ShapeEntity shape : whiteboard.getShapes()) {
-            shape.setWhiteboard(whiteboard);
-        }
         return whiteboardRepository.save(whiteboard);
+    }
+
+    public Whiteboard updateWhiteboard(Long whiteboardId, List<ShapeEntity> shapes,
+            @AuthenticationPrincipal Artist artist) {
+        // Fetch the existing whiteboard
+        Whiteboard existingWhiteboard = whiteboardRepository.findById(whiteboardId)
+                .orElseThrow(() -> new RuntimeException("Whiteboard not found"));
+
+        // Check if the artist is authorized (creator or collaborator)
+        boolean isAuthorized = existingWhiteboard.getCreatedBy().getId().equals(artist.getId()) ||
+                existingWhiteboard.getCollaborators().stream()
+                        .anyMatch(collaborator -> collaborator.getId().equals(artist.getId()));
+
+        if (!isAuthorized) {
+            throw new RuntimeException("Not authorized to update this whiteboard");
+        }
+
+        // Update shapes
+        if (shapes != null) {
+            // Clear old shapes
+            existingWhiteboard.getShapes().clear();
+            for (ShapeEntity shape : shapes) {
+                shape.setWhiteboard(existingWhiteboard);
+                existingWhiteboard.getShapes().add(shape);
+            }
+        }
+
+        // Save updated whiteboard
+        return whiteboardRepository.save(existingWhiteboard);
     }
 
     public List<Whiteboard> getAllWhiteboards() {
         return whiteboardRepository.findAll();
+    }
+
+    public Whiteboard getWhiteboardById(Long id) {
+        return whiteboardRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Whiteboard not found"));
     }
 
     public List<Whiteboard> search(String title, String artist) {
@@ -60,5 +93,11 @@ public class WhiteboardService {
             throw new RuntimeException("Only the creator can delete this whiteboard");
         }
         whiteboardRepository.delete(whiteboard);
+    }
+
+    public List<ShapeEntity> getShapesByWhiteboardId(Long whiteboardId) {
+        Whiteboard whiteboard = whiteboardRepository.findById(whiteboardId)
+                .orElseThrow(() -> new RuntimeException("Whiteboard not found"));
+        return whiteboard.getShapes();
     }
 }

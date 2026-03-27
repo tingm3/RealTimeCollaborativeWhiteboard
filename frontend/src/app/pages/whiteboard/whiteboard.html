@@ -1,21 +1,30 @@
-<app-header-whiteboard (onShare)="openShareModal()"></app-header-whiteboard> <!-- ← add (onShare) -->
+<app-header-whiteboard (onShare)="openShareModal()"></app-header-whiteboard>
+<!-- ← add (onShare) -->
 
 <div class="whiteboard-container">
-  <app-toolbar (toolSelected)="onToolSelected($event)" (undo)="onUndo()" (trash)="onTrash()"
-    (save)="onSave()"></app-toolbar>
+  <app-toolbar
+    (toolSelected)="onToolSelected($event)"
+    (undo)="onUndo()"
+    (trash)="onTrash()"
+    (save)="onSave()"
+  ></app-toolbar>
   <canvas #canvas></canvas>
 </div>
 
 <!-- Share Modal -->
 <div *ngIf="showShareModal" class="share-overlay" (click)="closeShareModal()">
   <div class="share-modal" (click)="$event.stopPropagation()">
-
     <div class="share-modal__header">
       <h2>Share Whiteboard</h2>
       <button class="share-modal__close" (click)="closeShareModal()">✕</button>
     </div>
 
-    <input class="share-modal__search" type="text" placeholder="Search by name" [(ngModel)]="searchQuery" />
+    <input
+      class="share-modal__search"
+      type="text"
+      placeholder="Search by name"
+      [(ngModel)]="searchQuery"
+    />
 
     <div class="share-modal__list">
       <p class="share-modal__section-label">Add people</p>
@@ -28,9 +37,12 @@
           <option value="READ">Viewer</option>
           <option value="WRITE">Editor</option>
         </select> -->
-        <span class="share-modal__add-btn" (click)="addCollaborator(user)" *ngIf="!recentlyAdded.includes(user.id)">+
-          Add</span>
-        <span class="share-modal__add-btn" style="color: green" *ngIf="recentlyAdded.includes(user.id)">✓ Added!</span>
+        <span
+          class="share-modal__add-btn"
+          (click)="addCollaborator(user)"
+          *ngIf="!recentlyAdded.includes(user.id)"
+          >+ Add</span
+        >
       </div>
       <p *ngIf="filteredUsers.length === 0" class="share-modal__empty">No users found</p>
     </div>
@@ -42,12 +54,20 @@
         <div class="share-modal__user-info">
           <span class="share-modal__username">{{ collab.username }}</span>
         </div>
-        <button class="share-modal__remove-btn" *ngIf="collab.id !== currentArtistId"
-          (click)="removeCollaborator(collab)">
+        <button
+          class="share-modal__remove-btn"
+          *ngIf="collab.id !== currentArtistId && !recentlyAdded.includes(collab.id)"
+          (click)="removeCollaborator(collab)"
+        >
           Remove
         </button>
+        <span
+          class="share-modal__add-btn"
+          style="color: green"
+          *ngIf="recentlyAdded.includes(collab.id)"
+          >✓ Added!</span
+        >
       </div>
     </div>
-
   </div>
 </div>

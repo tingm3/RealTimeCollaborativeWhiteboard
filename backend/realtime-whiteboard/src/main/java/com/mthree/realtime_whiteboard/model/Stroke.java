@@ -1,6 +1,9 @@
 package com.mthree.realtime_whiteboard.model;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.ElementCollection;
@@ -9,12 +12,13 @@ import jakarta.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("stroke")
+@JsonTypeName("stroke")
 public class Stroke extends ShapeEntity {
     private String type = "pen";
     private int lineWidth;
 
     @ElementCollection
-    private List<Point> points;
+    private List<Point> points = new ArrayList<>();;
 
     @Override
     public String getType() {

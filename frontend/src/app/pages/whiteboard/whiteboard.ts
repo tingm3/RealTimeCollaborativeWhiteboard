@@ -1,48 +1,57 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http'
 import { ActivatedRoute } from '@angular/router';
-;
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Toolbar } from '../../shared/reusableComponent/toolbar/toolbar';
 import { HeaderWhiteboard } from '../../shared/reusableComponent/header/header-whiteboard/header-whiteboard';
 import * as Stomp from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { Client, IMessage } from '@stomp/stompjs';
+import { Artist, ArtistService } from '../../core/services/artist/artist-service';
+import { API_URL, WhiteboardService } from './services/whiteboard-service';
 
 @Component({
   selector: 'app-whiteboard',
   imports: [Toolbar, HeaderWhiteboard, CommonModule, FormsModule],
+  providers: [
+    WhiteboardService,
+    { provide: API_URL, useValue: 'http://localhost:8080/whiteboards' },
+  ],
   templateUrl: './whiteboard.html',
   styleUrl: './whiteboard.css',
 })
 export class Whiteboard {
-  recentlyAdded: number[] = [];
   @ViewChild('canvas', { static: true }) canvasRef!: ElementRef<HTMLCanvasElement>;
 
   private ctx!: CanvasRenderingContext2D;
 
   private stompClient!: Stomp.Client;
   private clientId = Math.random().toString(36).substr(2, 9); // Unique ID for this client
-  constructor(private http: HttpClient, private route: ActivatedRoute) { }
+  constructor(
+    private route: ActivatedRoute,
+    private artistService: ArtistService,
+    private whiteboardService: WhiteboardService,
+  ) {}
 
   currentTool: string = 'pen';
   whiteboardId!: number;
+  currentArtistId = Number(localStorage.getItem('artistId'));
   showShareModal = false;
-  allUsers: { id: number; username: string; }[] = [];
-  collaborators: { id: number; username: string }[] = [];
+  allUsers: Artist[] = [];
+  collaborators: Artist[] = [];
+  recentlyAdded: number[] = [];
   searchQuery = '';
-
 
   get filteredUsers() {
     const q = this.searchQuery.toLowerCase().trim();
-    if (!q) return this.allUsers.filter(u => !this.collaborators.find(c => c.id === u.id));
+
+    if (!q) return this.allUsers.filter((u) => !this.collaborators.find((c) => c.id === u.id));
+
     return this.allUsers.filter(
-      (u) =>
-        u.username.toLowerCase().includes(q) &&
-        !this.collaborators.find((c) => c.id === u.id)
+      (u) => u.username.toLowerCase().includes(q) && !this.collaborators.find((c) => c.id === u.id),
     );
   }
+
   // Drawing state
   private drawing = false; // Track if currently drawing (for pen, rect, circle)
   private isPanning = false; // Track if the canvas is being dragged
@@ -55,16 +64,22 @@ export class Whiteboard {
   private viewportTransform = {
     x: 0,
     y: 0,
-    scale:
-      1,
+    scale: 1,
   };
 
   ngOnInit() {
     this.whiteboardId = Number(this.route.snapshot.paramMap.get('id'));
+    this.whiteboardService.getDrawings(this.whiteboardId).subscribe({
+      next: (shapes) => {
+        this.drawings = shapes;
+        this.redrawCanvas();
+      },
+      error: (err) => {
+        console.error('Error fetching drawings', err);
+      },
+    });
     console.log('whiteboardId:', this.whiteboardId);
   }
-  currentArtistId = Number(localStorage.getItem('artistId'));
-
 
   ngAfterViewInit() {
     this.connect();
@@ -125,8 +140,24 @@ export class Whiteboard {
   }
 
   onSave() {
-    // TODO: Implement save functionality (e.g., export canvas as image or save drawing data)
+    console.log(Array.isArray(this.drawings), this.drawings);
+
+    this.whiteboardService.updateWhiteboard(this.whiteboardId, this.drawings).subscribe({
+      next: (savedBoard) => {
+        console.log('Whiteboard saved successfully', savedBoard);
+        alert('Board saved!');
+      },
+      error: (err) => {
+        console.error('Error saving whiteboard', err);
+        alert('Failed to save board');
+      },
+    });
   }
+
+  // =========================
+  // UI for sharing and collaborators
+  // =========================
+
   openShareModal() {
     console.log('openShareModal called');
     this.showShareModal = true;
@@ -134,19 +165,14 @@ export class Whiteboard {
 
     const currentArtistId = Number(localStorage.getItem('artistId'));
 
-    this.http
-      .get<{ id: number; username: string; }[]>('http://localhost:8080/artists')
-      .subscribe((users) => {
-        this.allUsers = users.filter(u => u.id !== currentArtistId); // exclude yourself
-      });
+    this.artistService.getAllArtists().subscribe((users) => {
+      this.allUsers = users.filter((u) => u.id !== currentArtistId); // exclude yourself
+    });
 
-    this.http
-      .get<{ id: number; username: string; }[]>(
-        `http://localhost:8080/whiteboards/${this.whiteboardId}/collaborators`
-      )
+    this.whiteboardService
+      .getCollaborators(this.whiteboardId)
       .subscribe((collabs) => (this.collaborators = collabs));
   }
-
 
   closeShareModal() {
     this.showShareModal = false;
@@ -154,37 +180,30 @@ export class Whiteboard {
 
   selectedPermission: { [userId: number]: string } = {};
 
-  addCollaborator(user: { id: number; username: string; }) {
+  addCollaborator(user: { id: number; username: string }) {
     const permission = this.selectedPermission[user.id] || 'READ';
-    this.http
-      .post(`http://localhost:8080/whiteboards/${this.whiteboardId}/collaborators`, {
-        userId: user.id,
-        permission: permission
-      })
-      .subscribe({
-        next: () => {
-          this.collaborators.push(user);
-          this.recentlyAdded.push(user.id);
-          delete this.selectedPermission[user.id];
+    this.whiteboardService.addCollaborator(this.whiteboardId, user.id).subscribe({
+      next: () => {
+        this.collaborators.push(user);
+        this.recentlyAdded.push(user.id);
+        delete this.selectedPermission[user.id];
 
-          // clear the "Added!" indicator after 2 seconds
-          setTimeout(() => {
-            this.recentlyAdded = this.recentlyAdded.filter(id => id !== user.id);
-          }, 2000);
-        },
-        error: (err) => {
-          console.error('Failed to add collaborator', err);
-          alert('Failed to add collaborator. Please try again.');
-        }
-      });
+        // clear the "Added!" indicator after 2 seconds
+        setTimeout(() => {
+          this.recentlyAdded = this.recentlyAdded.filter((id) => id !== user.id);
+        }, 1000);
+      },
+      error: (err) => {
+        console.error('Failed to add collaborator', err);
+        alert('Failed to add collaborator. Please try again.');
+      },
+    });
   }
 
-  removeCollaborator(user: { id: number; username: string; }) {
-    this.http
-      .delete(`http://localhost:8080/whiteboards/${this.whiteboardId}/collaborators/${user.id}`)
-      .subscribe(() => {
-        this.collaborators = this.collaborators.filter((c) => c.id !== user.id);
-      });
+  removeCollaborator(user: { id: number; username: string }) {
+    this.whiteboardService.removeCollaborator(this.whiteboardId, user.id).subscribe(() => {
+      this.collaborators = this.collaborators.filter((c) => c.id !== user.id);
+    });
   }
 
   // =========================

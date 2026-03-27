@@ -1,10 +1,13 @@
 package com.mthree.realtime_whiteboard.model;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("note")
+@JsonTypeName("note")
 public class NoteShape extends ShapeEntity {
     private String type = "note";
     private double x;

@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mthree.realtime_whiteboard.model.Artist;
+import com.mthree.realtime_whiteboard.model.ShapeEntity;
 import com.mthree.realtime_whiteboard.model.Whiteboard;
 import com.mthree.realtime_whiteboard.service.CollaboratorService;
 import com.mthree.realtime_whiteboard.service.WhiteboardService;
@@ -45,11 +47,23 @@ public class WhiteboardController {
         return whiteboardService.getAllWhiteboards();
     }
 
+    @GetMapping("/{id}")
+    public Whiteboard getById(@PathVariable Long id) {
+        return whiteboardService.getWhiteboardById(id);
+    }
+
     @GetMapping("/shared")
     @Transactional
     public ResponseEntity<List<Whiteboard>> getSharedBoards(@AuthenticationPrincipal Artist artist) {
         List<Whiteboard> shared = collaboratorService.getSharedBoards(artist);
         return ResponseEntity.ok(shared);
+    }
+
+    @PutMapping("/{id}/shapes")
+    public Whiteboard updateShapes(@PathVariable Long id,
+            @RequestBody List<ShapeEntity> shapes,
+            @AuthenticationPrincipal Artist artist) {
+        return this.whiteboardService.updateWhiteboard(id, shapes, artist);
     }
 
     @GetMapping("/search")
@@ -69,6 +83,12 @@ public class WhiteboardController {
             @AuthenticationPrincipal Artist artist) {
         whiteboardService.deleteWhiteboard(id, artist);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/shapes")
+    public ResponseEntity<List<ShapeEntity>> getShapes(@PathVariable Long id) {
+        List<ShapeEntity> shapes = whiteboardService.getShapesByWhiteboardId(id);
+        return ResponseEntity.ok(shapes);
     }
 
 }

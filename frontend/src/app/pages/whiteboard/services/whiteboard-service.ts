@@ -25,6 +25,10 @@ export class WhiteboardService {
     return this.http.post<Whiteboard>(this.apiUrl, board);
   }
 
+  updateWhiteboard(id: number, shapes: any[]): Observable<Whiteboard> {
+    return this.http.put<Whiteboard>(`${this.apiUrl}/${id}/shapes`, shapes);
+  }
+
   getAllWhiteboards(): Observable<Whiteboard[]> {
     return this.http.get<Whiteboard[]>(this.apiUrl);
   }
@@ -42,5 +46,25 @@ export class WhiteboardService {
       this.http.get<Whiteboard[]>(`${this.apiUrl}/search`, { params }),
     );
     return this.http.get<Whiteboard[]>(`${this.apiUrl}/search`, { params });
+  }
+
+  getCollaborators(whiteboardId: number): Observable<Artist[]> {
+    return this.http.get<Artist[]>(`${this.apiUrl}/${whiteboardId}/collaborators`);
+  }
+
+  addCollaborator(whiteboardId: number, artistId: number): Observable<Artist[]> {
+    return this.http.post<Artist[]>(`${this.apiUrl}/${whiteboardId}/collaborators`, { artistId });
+  }
+
+  removeCollaborator(whiteboardId: number, artistId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${whiteboardId}/collaborators/${artistId}`);
+  }
+
+  getWhiteboardById(id: number): Observable<Whiteboard> {
+    return this.http.get<Whiteboard>(`${this.apiUrl}/${id}`);
+  }
+
+  getDrawings(whiteboardId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/${whiteboardId}/shapes`);
   }
 }
